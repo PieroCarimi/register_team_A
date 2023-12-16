@@ -1,5 +1,5 @@
 export interface TRegister {
-    id: number;
+    id: string;
     name: string;
     students: Array<TStudent["id"]>;
     votes: Array<{
