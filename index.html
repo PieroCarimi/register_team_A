@@ -15,6 +15,7 @@
         <i class="fa fa-bars" style="font-size:28px;color:black;margin-top: 5px;"></i>
         <div class="w3-container ms-auto">
             <button class="btn btn-primary" style="margin-right: 7px;" onclick="document.getElementById('id01').style.display='block'">Crea registro</button>
+            <button class="btn btn-primary" style="margin-right: 7px;" onclick="document.getElementById('id02').style.display='block'">Crea studente</button>
             <div id="id01" class="w3-modal">
                 <div class="w3-modal-content w-25 h-25 d-flex justify-content-center">
                     <div class="w3-container">
@@ -27,6 +28,28 @@
             </div>
         </div>
     </nav>
+    <div class="w3-container ms-auto">
+        <div id="id02" class="w3-modal">
+            <div class="w3-modal-content w-25 h-50 d-flex justify-content-center">
+                <div class="w3-container">
+                    <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    <form id="insertStudent">
+                        <label for="fname">Name:</label><br>
+                        <input type="text" id="studentName" name="formName" class="form-control"><br>
+    
+                        <label for="lname">Lastname:</label><br>
+                        <input type="text" id="studentLastname" name="formLastname" class="form-control"><br>
+    
+                        <label for="email">Email:</label><br>
+                        <input type="email" id="studenteEmail" name="formEmail" class="form-control">
+    
+                        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Crea</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <footer class="footer fixed-bottom">
         <div class="text-center p-4" style="background-color: black; color: white;">
             Copyright 2024 - Team A
