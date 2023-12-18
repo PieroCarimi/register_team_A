@@ -30,30 +30,31 @@ const updateRegister = ({ id, name }) => {
         register.name = name;
     }
 };
-
-const createStudent = (name, lastName, email, registerIds) => {
+const createStudent = (name, lastName, email) => {
     const newStudent = {
         id: generateUniqueId(),
         name,
         lastName,
         email,
-        lectures: registerIds,
+        lectures: [] //registerIds,
     };
     students.push(newStudent);
-    connectStudentToRegister(newStudent.id, registerIds); // Ricordati di fornire l'ID del registro
+    //connectStudentToRegister(newStudent.id, registerIds); // Ricordati di fornire l'ID del registro
 };
-
-const connectStudentToRegister = (studentId, registerIds) => {
+const connectStudentToRegister = (studentId, registerId) => {
     const student = students.find((s) => s.id === studentId);
-    //const register = registers.find((r) => r.id === registerId);
-    if (student) {
-        registerIds.forEach((registerId) => {
-            const register = registers.find((r) => r.id === registerId);
-            if (register) {
-                
-                register.students.push(student);
-            }
-        });
+    const register = registers.find((r) => r.id === registerId);
+    if (student && register) {
+        // Controlla se lo studente non è già registrato
+        if (!register.students.includes(studentId)) {
+            register.students.push(studentId);
+        }
+        else {
+            console.log("Lo studente è già registrato a questo registro.");
+        }
+    }
+    else {
+        console.log("Studente o registro non trovato.");
     }
 };
 
