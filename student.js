@@ -1,4 +1,4 @@
-let students = []
+const students = []
 const createStudent = (name, lastName, email) => {
     const newStudent = {
         id: generateUniqueId(),
@@ -46,4 +46,4 @@ const getStudentList = () => {
 };
 
 createStudent("Gaetano","Alessandretto","ciao")
-console.log(getStudentList())
+//console.log(getStudentList())
