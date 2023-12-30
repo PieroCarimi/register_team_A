@@ -50,6 +50,26 @@ function getRegister(registerId) {
     }
 }
 
+function connectStudentToRegister(studentId, registerId) {
+    const student = students.find(x => x.id === studentId)
+
+    const register = registers.find(x => x.id === registerId)
+
+     if (student && register) {
+        // Controlla se lo studente non è già registrato
+        if (!register.students.includes(student)) {
+            register.students.push(student);
+        } else {
+            console.log("Lo studente è già registrato a questo registro.");
+        }
+    }
+    console.log(student)
+
+}
+
+
+
+
 function addStudent(registerId, studentId) {
     const register = registers.find(register => register.id === registerId);
 
