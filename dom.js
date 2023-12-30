@@ -9,7 +9,7 @@ formMatter.addEventListener("submit", function(e) {
         listHTML += `
             <div class="d-flex">
                 <li style="margin-right: 6px;">${x.id}</li>
-                <li style="margin-right: 6px;cursor:pointer;"><a id="${x.id}">${x.name}</a></li>
+                <li style="margin-right: 6px; cursor: pointer;" onclick="registerView('${x.id}', '${x.name}')">${x.name}</li>
                 <i class="bi bi-pencil" style="color:blue;" onclick="editName('${x.id}')"></i>
                 <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteRegister('${x.id}')"></i>
             </div>`;
@@ -19,9 +19,39 @@ formMatter.addEventListener("submit", function(e) {
 });
 
 function editName(id) {
+    // Chiedi all'utente di inserire il nuovo nome per la materia
     let newName = prompt("Inserisci il nuovo nome per la materia:");
-    updateRegister(id,newName)
+    
+    // Trova l'oggetto corrispondente nella lista registers
+    let registerToUpdate = registers.find(x => x.id === id);
+    
+    // Aggiorna il campo name con il nuovo nome
+    if (registerToUpdate) {
+        registerToUpdate.name = newName;
+    }
+    
+    // Aggiorna l'HTML della lista
+    let listHTML = "";
+    registers.forEach(function(x) {
+        listHTML += `
+            <div class="d-flex">
+                <li style="margin-right: 6px;">${x.id}</li>
+                <li style="margin-right: 6px; cursor: pointer;" onclick="registerView('${x.id}', '${x.name}')">${x.name}</li>
+                <i class="bi bi-pencil" style="color:blue;" onclick="editName('${x.id}')"></i>
+                <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteRegister('${x.id}')"></i>
+            </div>`;
+    });
+    
+    // Aggiorna l'HTML della lista nel DOM
+    matterList.innerHTML = listHTML;
+    
+    // Aggiorna l'interfaccia utente (se necessario)
+    updateUI();
+    
+    console.log(id);
+    console.log(registers);
 }
+
 
 function updateUI() {
     let listHTML = "";
@@ -29,10 +59,11 @@ function updateUI() {
         listHTML += `
             <div class="d-flex">
                 <li style="margin-right: 6px;">${x.id}</li>
-                <li style="margin-right: 6px;cursor:pointer;"><a id="${x.id}">${x.name}</a></li>
-                <i class="bi bi-pencil" style="color:blue;" onclick="editName('${x.name}')"></i>
+                <li style="margin-right: 6px; cursor: pointer;" onclick="registerView('${x.id}', '${x.name}')">${x.name}</li>
+                <i class="bi bi-pencil" style="color:blue;" onclick="editName('${x.id}')"></i>
                 <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteRegister('${x.id}')"></i>
             </div>`;
+            registerView(x.id,x.name)
     });
     matterList.innerHTML = listHTML;
 }
@@ -123,3 +154,37 @@ const openStudentListModal = () => {
     document.getElementById('id03').style.display = 'block';
     studentUI();
 };
+
+let idregistro = ""
+function registerView(id, name) { // Definizione della funzione "registerView" che accetta due parametri: "id" e "name"
+    idregistro = id
+    console.log(id + name);
+     // Ottieni l'elemento HTML con l'id "registromateria"
+    let materia = document.getElementById("registromateria");
+    // Inizializza una stringa HTML per la visualizzazione della materia
+    let listHTML = "";
+    listHTML += `
+        <div class="d-flex justify-content-center">
+            <div class="row">
+                <br>
+                <h1>${name}</h1>
+                <p style="font-size:10px">${id}</p>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="document.getElementById('connectedStudentToRegister').style.display='block'">addStudent</button>`
+        // Aggiorna il contenuto dell'elemento "registromateria" con la stringa HTML
+        materia.innerHTML = listHTML;
+        console.log(registers)
+
+}
+      // Definizione della funzione "idRegister" che restituisce il valore corrente di "idregistro"
+      function idRegister (){return idregistro}
+
+    
+       
+       
+    
+    
+
+
+
