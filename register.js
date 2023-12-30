@@ -1,3 +1,4 @@
+
 const registers = [];
 
 function createRegister(registerName) {
@@ -17,6 +18,8 @@ function updateRegister(registerId, newName) {
 
     if (registerToUpdate) {
         registerToUpdate.name = newName;
+        updateUI();
+        console.log(registers)
         return registerToUpdate;
     } else {
         console.error("Register not found");
@@ -30,6 +33,7 @@ function deleteRegister(registerId) {
     if (registerIndex !== -1) {
         registers.splice(registerIndex, 1);
         console.log("Register deleted successfully");
+        updateUI(); // Aggiorna l'interfaccia utente dopo la cancellazione
     } else {
         console.error("Register not found");
     }
@@ -283,8 +287,3 @@ function deleteAttendances(registerId, lessonId, studentId) {
 }
 
 
-createRegister("Matematica");
-//addStudent("Matematica","Gaetano")
-addLesson("Matematica", "a");
-console.log(registers)
-console.log(students)
