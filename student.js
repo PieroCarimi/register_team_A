@@ -11,18 +11,22 @@ const createStudent = (name, lastName, email) => {
 };
 
 const deleteStudent = (idStudent) => {
-    const index = scripts.students.findIndex((student) => student.id === idStudent);
+    const index = students.findIndex((student) => student.id === idStudent);
     if (index !== -1) {
         students.splice(index, 1);
+        console.log(students);
+        studentUI();
     }
 };
 
 const updateStudent = (idStudent, name, lastName, email) => {
     const studentIndex = students.findIndex((s) => s.id === idStudent);
     if (studentIndex !== -1) {
-        scripts.students[studentIndex].name = name;
-        scripts.students[studentIndex].lastName = lastName;
-        scripts.students[studentIndex].email = email;
+        students[studentIndex].name = name;
+        students[studentIndex].lastName = lastName;
+        students[studentIndex].email = email;
+        studentUI();
+        console.log(students);
     } else {
         console.log("Studente non trovato.");
     }
@@ -45,5 +49,5 @@ const getStudentList = () => {
     return students;
 };
 
-createStudent("Gaetano","Alessandretto","ciao")
+//createStudent("Gaetano","Alessandretto","ciao")
 //console.log(getStudentList())
