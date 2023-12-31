@@ -171,7 +171,14 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
                 <p style="font-size:10px">${id}</p>
             </div>
         </div>
-        <button type="button" class="btn btn-primary" onclick="document.getElementById('connectedStudentToRegister').style.display='block'">addStudent</button>`
+        <button type="button" class="btn btn-primary" onclick="document.getElementById('connectedStudentToRegister').style.display='block'">addStudent</button>
+        <button type="button" class="btn btn-primary" onclick="document.getElementById('addLesson').style.display='block'">addLesson</button>
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="lessonDropDown()">
+            Lesson List
+        </button>
+        <ul class="dropdown-menu" id="lessonDropDown">
+            
+        </ul>`
         // Aggiorna il contenuto dell'elemento "registromateria" con la stringa HTML
         materia.innerHTML = listHTML;
         console.log(registers)
@@ -179,8 +186,41 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
 }
       // Definizione della funzione "idRegister" che restituisce il valore corrente di "idregistro"
       function idRegister (){return idregistro}
-
     
+      function ottieniData() {
+        const calendarioInput = document.getElementById('calendarioInput');
+        const dataSelezionata = calendarioInput.value;
+        console.log(idRegister())
+        const searchRegister = registers.find(x => x.id === idregistro)
+        addLesson(idRegister(),dataSelezionata)
+        //searchRegister.lessonList.push(dataSelezionata)
+        console.log(registers)
+        console.log(`Data selezionata: ${dataSelezionata}`);
+        return dataSelezionata
+      }
+
+      function lessonDropDown() {
+        const searchRegister = registers.find(x => x.id === idRegister());
+        const copySearchRegister = [...searchRegister.lessonList];
+        let lessonDropDown = document.getElementById("lessonDropDown");
+        let listHTML = "";
+    
+        // Ordina l'array in base alla data
+        const sortedDate = copySearchRegister.sort(function (a, b) {
+            return new Date(a.lessonDate) - new Date(b.lessonDate);
+        });
+    
+        // Creazione dell'HTML usando il risultato ordinato
+        sortedDate.forEach(function (x) {
+            listHTML += `
+                <div class="d-flex">
+                    <li style="margin-right: 6px;">${x.lessonId} ${x.lessonDate}</li>
+                    <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="removeLesson('${idRegister()}', '${x.lessonId}');"></i>
+                </div>`;
+        });
+    
+        lessonDropDown.innerHTML = listHTML;
+    }
        
        
     

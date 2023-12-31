@@ -132,6 +132,8 @@ function addLesson(registerId, lessonDate) {
 }
 
 function removeLesson(registerId, lessonId) {
+    console.log(registerId)
+    console.log(lessonId)
     const register = registers.find(register => register.id === registerId);
 
     if (register) {
@@ -140,10 +142,7 @@ function removeLesson(registerId, lessonId) {
         if (lessonIndex !== -1) {
             // Rimuovi la lezione dalla lista delle lezioni
             register.lessonList.splice(lessonIndex, 1);
-
-            // Rimuovi l'informazione di presenza per tutti gli studenti nella lezione
-            register.lessonList[lessonIndex].attendance = [];
-
+            
             console.log("Lesson removed successfully from register:", register.name);
         } else {
             console.error("Lesson not found");
