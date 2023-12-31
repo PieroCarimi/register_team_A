@@ -176,9 +176,27 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="lessonDropDown()">
             Lesson List
         </button>
+        <!-- Aggiunta tabella per registro -->
         <ul class="dropdown-menu" id="lessonDropDown">
-            
-        </ul>`
+        </ul>
+        <table class="table table-striped" style="display: none;" id="tableRegisterLessonDisplay">
+            <thead>
+                <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Orario di entrata</th>
+                    <th scope="col">Orario di uscita</th>
+                    <th scope="col">Presenza</th>
+                    <th scope="col">Actions</th>
+                    <th scope="col" colspan="2">Argomento</th>
+                </tr>
+            </thead>
+            <tbody id="idbody">
+            </tbody>
+            </table>
+
+        `
         // Aggiorna il contenuto dell'elemento "registromateria" con la stringa HTML
         materia.innerHTML = listHTML;
         console.log(registers)
@@ -199,7 +217,8 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
         return dataSelezionata
       }
 
-      function lessonDropDown() {
+      let lessonId = ""  // id dinamico per le lezioni
+      function lessonDropDown() {  //Ordinare per più recenti le date delle lezioni
         const searchRegister = registers.find(x => x.id === idRegister());
         const copySearchRegister = [...searchRegister.lessonList];
         let lessonDropDown = document.getElementById("lessonDropDown");
@@ -214,13 +233,56 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
         sortedDate.forEach(function (x) {
             listHTML += `
                 <div class="d-flex">
-                    <li style="margin-right: 6px;">${x.lessonId} ${x.lessonDate}</li>
+                <li style="margin-right: 6px; cursor: pointer;" onclick="lessonTable('${x.lessonId}')">${x.lessonId} ${x.lessonDate}</li>
                     <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="removeLesson('${idRegister()}', '${x.lessonId}');"></i>
                 </div>`;
-        });
+            });
     
         lessonDropDown.innerHTML = listHTML;
     }
+  
+       function lessonTable(x){  // creazione tabella per ogni registro
+        lessonId = x
+        let listHTML = "";
+        let tableRegisterLesson = document.getElementById("idbody")
+        console.log(lessonId)
+        let registro = registers.find(x => x.id === idRegister() )  //find per trovare l'oggetto registro corrispondente
+        let ciao = document.getElementById("tableRegisterLessonDisplay")
+        ciao.style.display = "block"
+        registro.students.forEach(function (x){ //creazione tabella dinamica per inseriri le informazioni degli utenti
+        listHTML += `<div class="container mt-4">
+            <tr>
+                  <td>${x.id}</td>
+                  <td>${x.name}</td>
+                  <td>${x.lastName}</td>
+                  <td> <input type="time" id="orarioentrata" name="orario" required></td>
+                  <td> <input type="time" id="orariouscita" name="orario" required></td>
+                  <td><input type="radio" id="html" name="fav_language" value="SI">
+                  <label for="html">SI</label><br>
+                  <input type="radio" id="css" name="fav_language" value="NO">
+                  <label for="css">NO</label></td>
+                  <td><button class="btn btn-primary id="editStudentLesson">edit</button></td>
+             </tr>      
+            </tbody>
+        </table>
+    </div>
+    `;
+})
+
+    tableRegisterLesson.innerHTML = listHTML
+    
+}
+
+
+
+
+
+
+
+    
+
+
+    
        
        
     
