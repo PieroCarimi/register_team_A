@@ -1,3 +1,5 @@
+
+
 let formMatter = document.getElementById("formMatter")
 formMatter.addEventListener("submit", function(e) {
     e.preventDefault();
@@ -188,7 +190,8 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
                     <th scope="col">Orario di entrata</th>
                     <th scope="col">Orario di uscita</th>
                     <th scope="col">Presenza</th>
-                    <th scope="col">Actions</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
                     <th scope="col" colspan="2">Argomento</th>
                 </tr>
             </thead>
@@ -239,43 +242,171 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
             });
     
         lessonDropDown.innerHTML = listHTML;
+        console.log(registers)
     }
-  
-       function lessonTable(x){  // creazione tabella per ogni registro
-        lessonId = x
-        let listHTML = "";
-        let tableRegisterLesson = document.getElementById("idbody")
-        console.log(lessonId)
-        let registro = registers.find(x => x.id === idRegister() )  //find per trovare l'oggetto registro corrispondente
-        let ciao = document.getElementById("tableRegisterLessonDisplay")
-        ciao.style.display = "block"
-        registro.students.forEach(function (x){ //creazione tabella dinamica per inseriri le informazioni degli utenti
+       // Funzione per creare la tabella delle lezioni per ogni registro
+function lessonTable(x) {
+    // Impostare l'ID della lezione corrente
+    lessonId = x;
+    console.log(lessonId);
+
+    // Stringa HTML che conterrà la tabella delle lezioni
+    let listHTML = "";
+
+    // Ottenere il riferimento all'elemento del corpo della tabella nel DOM
+    let tableRegisterLesson = document.getElementById("idbody");
+
+    // Trovare l'oggetto registro corrispondente all'ID del registro corrente
+    let registro = registers.find(x => x.id === idRegister());
+
+    // Ottenere la lista degli studenti ordinata per cognome
+    const orderStudents = registro.students.slice().sort((a, b) => a.lastName.localeCompare(b.lastName));
+
+    // Ottenere il riferimento all'elemento di visualizzazione della tabella delle lezioni
+    let ciao = document.getElementById("tableRegisterLessonDisplay");
+    ciao.style.display = "block";
+
+    // Trovare l'oggetto lezione corrispondente all'ID della lezione corrente
+    let lessonRegister = registro.lessonList.find(lesson => lesson.lessonId === lessonId);
+    console.log(lessonRegister);
+
+    // Iterare sugli studenti ordinati per creare righe della tabella
+    orderStudents.forEach(function (x) {
+        // Trovare la presenza dello studente nella lezione corrente
+        let AttendanceStudent = lessonRegister.attendance.find(x => x.studentId === studentId);
+
+        // Variabili per l'orario di entrata, uscita e presenza dello studente
+        let orarioEntrata, orarioUscita;
+
+        // Verificare se è presente una registrazione di presenza per lo studente
+        if (AttendanceStudent) {
+            // Ottenere l'orario di entrata, uscita e presenza dalla registrazione di presenza
+            orarioEntrata = getAttendances(idRegister(), lessonId, studentId).entryTime;
+            console.log(orarioEntrata);
+            orarioUscita = getAttendances(idRegister(), lessonId, studentId).exitTime;
+            console.log(orarioUscita);
+        } else {
+            // Se non c'è registrazione di presenza, impostare gli orari a vuoti
+            orarioEntrata = "";
+            orarioUscita = "";
+        }
+
+        // Costruire la stringa HTML per la riga della tabella
         listHTML += `<div class="container mt-4">
             <tr>
                   <td>${x.id}</td>
                   <td>${x.name}</td>
                   <td>${x.lastName}</td>
-                  <td> <input type="time" id="orarioentrata" name="orario" required></td>
-                  <td> <input type="time" id="orariouscita" name="orario" required></td>
-                  <td><input type="radio" id="html" name="fav_language" value="SI">
-                  <label for="html">SI</label><br>
-                  <input type="radio" id="css" name="fav_language" value="NO">
-                  <label for="css">NO</label></td>
-                  <td><button class="btn btn-primary id="editStudentLesson">edit</button></td>
+                   <td id="orarioentrata_${x.id}">${orarioEntrata}</td>
+                <td id="orariouscita_${x.id}">${orarioUscita}</td>
+                <td id="presenza_${x.id}"></td>
+                  <td><button class="btn btn-primary id="editStudentLesson" onclick="document.getElementById('formAttendance').style.display='block'; addAttendance('${x.id}')">edit</button></td>
+                  <td><button class="btn btn-danger id="deleteStudentLesson">delete</button></td>
+                  <td id="argomento"></td>
              </tr>      
             </tbody>
         </table>
     </div>
     `;
-})
+    });
 
-    tableRegisterLesson.innerHTML = listHTML
-    
+    // Inserire la stringa HTML nella tabella delle lezioni
+    tableRegisterLesson.innerHTML = listHTML;
 }
 
 
+function deleteLessonStudents(idStudent){
+    removeStudent(idRegister,idStudent)
+    let registro = registers.find(x => x.id === idRegister())
+    const studentIndex = registro.students.findIndex((student) => student.id === idStudent);
+    registro.students.splice(studentIndex, 1);
+    const orderStudents = registro.students.slice().sort((a, b) => a.lastName.localeCompare(b.lastName));
+    console.log(orderStudents)
+    let lessonRegister = registro.lessonList.find(lesson => lesson.lessonId === lessonId)
+    let listHTML = "";
+        let tableRegisterLesson = document.getElementById("idbody")
+        let ciao = document.getElementById("tableRegisterLessonDisplay")
+        ciao.style.display = "block"
+        orderStudents.forEach(function (x){ //creazione tabella dinamica per inseriri le informazioni degli utenti
+            let AttendanceStudent = lessonRegister.attendance.find(x => x.studentId === studentId)
+            if(AttendanceStudent){
+                var orarioEntrata =  getAttendances(idRegister(), lessonId, studentId).entryTime
+                console.log(orarioEntrata)
+                var orarioUscita =  getAttendances(idRegister(), lessonId, studentId).exitTime
+                console.log(orarioUscita)
+                var presenza =  getAttendances(idRegister(), lessonId, studentId).presenza
+               }
+               else{
+                orarioEntrata = ""
+                orarioUscita = ""
+               }
+            listHTML += `<div class="container mt-4">
+                <tr>
+                      <td>${x.id}</td>
+                      <td>${x.name}</td>
+                      <td>${x.lastName}</td>
+                       <td id="orarioentrata_${x.id}">${orarioEntrata}</td>
+                    <td id="orariouscita_${x.id}">${orarioUscita}</td>
+                    <td id="presenza_${x.id}"></td>
+                      <td><button class="btn btn-primary id="editStudentLesson" onclick="document.getElementById('formAttendance').style.display='block'; addAttendance('${x.id}')">edit</button></td>
+                      <td><button class="btn btn-danger id="deleteStudentLesson">delete</button></td>
+                      <td id="argomento"></td>
+                 </tr>      
+                </tbody>
+            </table>
+        </div>
+        `;
+    })
+    
+        tableRegisterLesson.innerHTML = listHTML
+        
+    }
+    
+    let studentId = ""
+    function addAttendance(studentIdx){
+        studentId = studentIdx
+    }
+
+// Ottenere il riferimento al form di registrazione presenze dal DOM
+let formAttendance = document.getElementById("formAttendance");
+
+// Aggiungere un gestore di eventi per l'invio del modulo di registrazione presenze
+const formAttendances = formAttendance.addEventListener("submit", function (e) {
+    // Impedire l'invio del modulo tradizionale
+    e.preventDefault();
+
+    // Ottenere i valori dei campi del modulo (orario di ingresso e uscita)
+    let oraIngresso = document.getElementById("oraIngresso").value;
+    let oraUscita = document.getElementById("oraUscita").value;
+
+    // Aggiungere la registrazione della presenza allo studente per la lezione corrente
+    addAttendanceStudentToLesson(idRegister(), lessonId, studentId, oraIngresso, oraUscita);
+
+    // Ottenere i riferimenti agli elementi HTML per visualizzare i dati aggiornati
+    let orarioEntrataElement = document.getElementById(`orarioentrata_${studentId}`);
+    let orarioUscitaElement = document.getElementById(`orariouscita_${studentId}`);
+    let presenzaElement = document.getElementById(`presenza_${studentId}`);
+
+    // Aggiornare gli elementi HTML con i nuovi dati
+    if (orarioEntrataElement) {
+        orarioEntrataElement.innerHTML = oraIngresso;
+    }
+    if (orarioUscitaElement) {
+        orarioUscitaElement.innerHTML = oraUscita;
+    }
+    if (presenzaElement) {
+        // Impostare la presenza come "Presente"
+        presenzaElement.innerHTML = `<span>Presente</span>`;
+    }
+
+    // Stampare l'oggetto "registers" nella console dopo l'aggiornamento
+    console.log(registers);
+});
 
 
+
+   
+   
 
 
 
