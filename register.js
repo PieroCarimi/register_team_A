@@ -59,6 +59,7 @@ function connectStudentToRegister(studentId, registerId) {
         // Controlla se lo studente non è già registrato
         if (!register.students.includes(student)) {
             register.students.push(student);
+            registerTableUI();
         } else {
             console.log("Lo studente è già registrato a questo registro.");
         }
@@ -156,14 +157,29 @@ function addGrade(registerId, idStudent, gradeDate, gradeValue) {
     const register = registers.find(register => register.id === registerId);
 
     if (register) {
-        const grade = {
-            gradeId: generateUniqueId(),
-            idStudent: idStudent,
-            gradeDate: gradeDate,
-            gradeValue: gradeValue
-        };
-        register.gradeList.push(grade);
-        console.log("Grade added successfully to register:", register.name);
+        // Trova l'indice della lezione corrispondente alla data della valutazione
+        const lessonIndex = register.lessonList.findIndex(lesson => lesson.lessonDate === gradeDate);
+
+        if (lessonIndex !== -1) {
+            // Verifica se lo studente ha già un voto per questa lezione
+            const studentGradeIndex = register.gradeList.findIndex(grade => grade.idStudent === idStudent && grade.gradeDate === gradeDate);
+
+            if (studentGradeIndex === -1) {
+                // Se lo studente non ha già un voto per questa lezione, aggiungi la nuova valutazione
+                const grade = {
+                    gradeId: generateUniqueId(),
+                    idStudent: idStudent,
+                    gradeDate: gradeDate,
+                    gradeValue: gradeValue
+                };
+                register.gradeList.push(grade);
+                console.log("Grade added successfully to register:", register.name);
+            } else {
+                console.log("A grade already exists for this student on this date");
+            }
+        } else {
+            console.error("Lesson not found");
+        }
     } else {
         console.error("Register not found");
     }

@@ -23,6 +23,7 @@ const deleteStudent = (idStudent) => {
         console.log(students);
         studentUI();
     }
+    
 }
 
 const updateStudent = (idStudent, name, lastName, email) => {
@@ -33,6 +34,7 @@ const updateStudent = (idStudent, name, lastName, email) => {
         students[studentIndex].email = email;
         studentUI();
         console.log(students);
+        registerTableUI();
     } else {
         console.log("Studente non trovato.");
     }
