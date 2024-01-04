@@ -182,17 +182,17 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
         <table class="table table-striped mt-4" style="display: none;" id="tableRegisterLessonDisplay">
             <thead>
                 <tr>
-                    <th scope="col">id</th>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Cognome</th>
-                    <th scope="col">Orario di entrata</th>
-                    <th scope="col">Orario di uscita</th>
-                    <th scope="col">Presenza</th>
-                    <th scope="col">Aggiungi Presenza</th>
-                    <th scope="col">Rimuovi Presenza</th>
-                    <th scope="col">Lista voti</th>
-                    <th scope="col">Aggiungi voto</th>
-                    <th scope="col" colspan="2">Argomento</th>
+                    <th scope="col" class="text-center">id</th>
+                    <th scope="col" class="text-center">Nome</th>
+                    <th scope="col" class="text-center">Cognome</th>
+                    <th scope="col" class="text-center">Orario di entrata</th>
+                    <th scope="col" class="text-center">Orario di uscita</th>
+                    <th scope="col" class="text-center">Presenza</th>
+                    <th scope="col" class="text-center">Aggiungi Presenza</th>
+                    <th scope="col" class="text-center">Rimuovi Presenza</th>
+                    <th scope="col" class="text-center">Lista voti</th>
+                    <th scope="col" class="text-center">Aggiungi voto</th>
+                    <th scope="col" colspan="2" class="text-center">Argomento</th>
                 </tr>
             </thead>
             <tbody id="idbody">
@@ -314,19 +314,19 @@ function registerTableUI(){
         // Costruire la stringa HTML per la riga della tabella
         listHTML += `<div class="container">
             <tr>
-                <td>${x.id}</td>
-                <td>${x.name}</td>
-                <td>${x.lastName}</td>
-                <td id="orarioentrata_${x.id}">${orarioEntrataElement}</td>
-                <td id="orariouscita_${x.id}">${orarioUscitaElement}</td>
-                <td id="presenza_${x.id}">${presenzaElement}</td>
-                <td><button class="btn btn btn-outline-primary" id="editStudentLesson" onclick="document.getElementById('formAttendance').style.display='block'; addAttendance('${x.id}');">Aggiungi</button></td>
-                <td><button class="btn btn-outline-danger" id="deleteStudentLesson" onclick="deleteAttendancesView('${idRegister()}','${lessonId}','${x.id}')">Rimuovi</button></td>
-                <td id="grade_${x.id}">
+                <td class="text-center align-middle">${x.id}</td>
+                <td class="text-center align-middle">${x.name}</td>
+                <td class="text-center align-middle">${x.lastName}</td>
+                <td id="orarioentrata_${x.id}" class="text-center align-middle">${orarioEntrataElement}</td>
+                <td id="orariouscita_${x.id}" class="text-center align-middle">${orarioUscitaElement}</td>
+                <td id="presenza_${x.id}" class="text-center align-middle">${presenzaElement}</td>
+                <td class="text-center align-middle"><button class="btn btn btn-outline-primary" id="editStudentLesson" onclick="document.getElementById('formAttendance').style.display='block'; addAttendance('${x.id}');">Aggiungi</button></td>
+                <td class="text-center align-middle"><button class="btn btn-outline-danger" id="deleteStudentLesson" onclick="deleteAttendancesView('${idRegister()}','${lessonId}','${x.id}')">Rimuovi</button></td>
+                <td id="grade_${x.id}" class="text-center align-middle">
                     <button class="btn btn-outline-secondary" onclick="document.getElementById('gradeTable').style.display='block'; studentGrade('${x.id}')">Lista voti</button>
                 </td>
-                <td><button class="btn btn btn-outline-primary" id="addGrade" onclick="document.getElementById('formGrade').style.display='block'; addAttendance('${x.id}')">Aggiungi</button></td>
-                <td id="argomento"></td>
+                <td class="text-center align-middle"><button class="btn btn btn-outline-primary" id="addGrade" onclick="document.getElementById('formGrade').style.display='block'; addAttendance('${x.id}')">Aggiungi</button></td>
+                <td id="argomento" class="text-center align-middle"></td>
              </tr>      
             </tbody>
         </table>
