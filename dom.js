@@ -311,7 +311,9 @@ console.log(gradeStudent);
                 <td id="presenza_${x.id}"></td>
                 <td><button class="btn btn btn-outline-primary" id="editStudentLesson" onclick="document.getElementById('formAttendance').style.display='block'; addAttendance('${x.id}')">Edit</button></td>
                 <td><button class="btn btn-outline-danger" id="deleteStudentLesson">Delete</button></td>
-                <td id="grade_${x.id}">${insertGrade}</td>
+                <td id="grade_${x.id}">
+                    <button class="btn btn-outline-secondary" onclick="document.getElementById('gradeTable').style.display='block'; studentGrade('${x.id}')">Grade List</button>
+                </td>
                 <td><button class="btn btn btn-outline-primary" id="addGrade" onclick="document.getElementById('formGrade').style.display='block'; addAttendance('${x.id}')">Add</button></td>
                 <td id="argomento"></td>
              </tr>      
@@ -409,16 +411,71 @@ const formGrades = formGrade.addEventListener("submit", function (e) {
     let gradeElement = document.getElementById(`grade_${studentId}`);
 
     // Aggiornare gli elementi HTML con i nuovi dati
-    if (gradeElement) {
-        gradeElement.innerHTML = grade;
-    }
+    //if (gradeElement) {
+     //   gradeElement.innerHTML = grade;
+    //}
 
     // Stampare l'oggetto "registers" nella console dopo l'aggiornamento
     console.log(registers);
 });
 
    
-   
+const studentGrade = (studentId) => {
+    const studentTableBody = document.getElementById('studentTableBodyGrade');
+    
+    studentTableBody.innerHTML = ''; // Pulisce il corpo della tabella prima di popolarlo
+
+    // const sortedStudents = getSortedStudentList();
+    const gradeStudentList = registers.find(x => x.id === idRegister()).gradeList;
+    const oggettiFiltrati = gradeStudentList.filter((oggetto) => oggetto.idStudent === studentId);
+
+    let registro = registers.find(x => x.id === idRegister());
+
+    // Trova l'oggetto lezione corrispondente all'ID della lezione corrente
+    //let lessonRegister = registro.lessonList.find(lesson => lesson.lessonId === lessonId);
+
+    // Trova l'oggetto studente corrispondente all'ID dello studente corrente
+    let student = registro.students.find(student => student.id === studentId);
+
+    // Ottenere il nome dello studente
+    const studentName = student ? `${student.name} ${student.lastName}` : '';
+
+    // Ottenere il nome della materia
+    const subjectName = registro.name;
+
+    // Aggiungi i dati dello studente e della materia a "StudentAndSubject"
+    const studentAndSubject = document.getElementById('studentAndSubject');
+    studentAndSubject.innerHTML = `<h2>${studentName}</h2><p>${subjectName}</p>`;
+
+    // Ordina l'array in base alla data crescente
+    oggettiFiltrati.sort((a, b) => new Date(a.gradeDate) - new Date(b.gradeDate));
+
+    console.log(oggettiFiltrati);
+
+    oggettiFiltrati.forEach(student => {
+        const row = document.createElement('tr');
+        row.id = `gradeRow_${student.gradeId}`; // Aggiungi un ID unico basato sull'ID del voto
+        row.innerHTML = `
+            <td class="text-center">${student.gradeDate}</td>
+            <td class="text-center">${student.gradeValue}</td>
+            <td class="text-center">
+                <button class="btn btn-outline-danger" onclick="removeSingleGrade('${idRegister()}','${student.gradeId}')">Delete</button>
+            </td>
+        `;
+        studentTableBody.appendChild(row);
+    });
+};
+
+function removeSingleGrade(register_id, grade_id) {
+    // Rimuovi il voto dal registro
+    removeGrade(register_id, grade_id);
+
+    // Se la rimozione è avvenuta con successo, aggiorna solo la riga associata al voto
+    const rowToRemove = document.getElementById(`gradeRow_${grade_id}`);
+    if (rowToRemove) {
+        rowToRemove.remove();
+    }
+}
 
 
 
