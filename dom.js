@@ -422,6 +422,7 @@ const formGrades = formGrade.addEventListener("submit", function (e) {
    
 const studentGrade = (studentId) => {
     const studentTableBody = document.getElementById('studentTableBodyGrade');
+    
     studentTableBody.innerHTML = ''; // Pulisce il corpo della tabella prima di popolarlo
 
     // const sortedStudents = getSortedStudentList();
@@ -453,16 +454,28 @@ const studentGrade = (studentId) => {
 
     oggettiFiltrati.forEach(student => {
         const row = document.createElement('tr');
+        row.id = `gradeRow_${student.gradeId}`; // Aggiungi un ID unico basato sull'ID del voto
         row.innerHTML = `
             <td class="text-center">${student.gradeDate}</td>
             <td class="text-center">${student.gradeValue}</td>
             <td class="text-center">
-                <button class="btn btn-outline-danger" onclick="deleteStudent('${student.gradeId}')">Delete</button>
+                <button class="btn btn-outline-danger" onclick="removeSingleGrade('${idRegister()}','${student.gradeId}')">Delete</button>
             </td>
         `;
         studentTableBody.appendChild(row);
     });
 };
+
+function removeSingleGrade(register_id, grade_id) {
+    // Rimuovi il voto dal registro
+    removeGrade(register_id, grade_id);
+
+    // Se la rimozione è avvenuta con successo, aggiorna solo la riga associata al voto
+    const rowToRemove = document.getElementById(`gradeRow_${grade_id}`);
+    if (rowToRemove) {
+        rowToRemove.remove();
+    }
+}
 
 
 
