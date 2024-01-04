@@ -1,5 +1,3 @@
-
-
 let formMatter = document.getElementById("formMatter")
 formMatter.addEventListener("submit", function(e) {
     e.preventDefault();
@@ -185,15 +183,15 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
             <thead>
                 <tr>
                     <th scope="col">id</th>
-                    <th scope="col">First Name</th>
-                    <th scope="col">Last Name</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Cognome</th>
                     <th scope="col">Orario di entrata</th>
                     <th scope="col">Orario di uscita</th>
                     <th scope="col">Presenza</th>
-                    <th scope="col">Edit</th>
-                    <th scope="col">Delete</th>
-                    <th scope="col">Grade</th>
-                    <th scope="col">Add Grade</th>
+                    <th scope="col">Aggiungi Presenza</th>
+                    <th scope="col">Rimuovi Presenza</th>
+                    <th scope="col">Lista voti</th>
+                    <th scope="col">Aggiungi voto</th>
                     <th scope="col" colspan="2">Argomento</th>
                 </tr>
             </thead>
@@ -286,35 +284,48 @@ function registerTableUI(){
         }else{
             insertGrade = "";
         }
-console.log(gradeStudent);
-        // Verificare se è presente una registrazione di presenza per lo studente
-        if (AttendanceStudent) {
-            // Ottenere l'orario di entrata, uscita e presenza dalla registrazione di presenza
-            orarioEntrata = getAttendances(idRegister(), lessonId, studentId).entryTime;
-            console.log(orarioEntrata);
-            orarioUscita = getAttendances(idRegister(), lessonId, studentId).exitTime;
-            console.log(orarioUscita);
-        } else {
-            // Se non c'è registrazione di presenza, impostare gli orari a vuoti
-            orarioEntrata = "";
-            orarioUscita = "";
-        }
 
+        // Verificare se è presente una registrazione di presenza per lo studente
+        
+            // Ottenere l'orario di entrata, uscita e presenza dalla registrazione di presenza
+           /* orarioEntrata = getAttendances(idRegister(), lessonId, studentId).entryTime;
+            console.log(orarioEntrata);
+            orarioUscita = getAttendances(idRegister(), lessonId, studentId).exitTime;*/
+            // Ottenere l'array di presenze e assenze per la lezione corrente
+  let attendanceObject = getAttendances(idRegister(), lessonId,x.id);
+
+    // Trova l'oggetto corrispondente nell'array di presenze e assenze
+
+        
+
+    // Aggiorna gli elementi HTML con i nuovi dati
+    
+       let orarioEntrataElement  = attendanceObject ? attendanceObject.entryTime : '';
+       console.log(orarioEntrataElement)
+       
+       let orarioUscitaElement  = attendanceObject ? attendanceObject.exitTime : '';
+       
+      let presenzaElement = attendanceObject ? (attendanceObject.presence? "Presente": "")  : '';
+    
+
+    console.log(registers);
+
+        
         // Costruire la stringa HTML per la riga della tabella
         listHTML += `<div class="container">
             <tr>
                 <td>${x.id}</td>
                 <td>${x.name}</td>
                 <td>${x.lastName}</td>
-                <td id="orarioentrata_${x.id}">${orarioEntrata}</td>
-                <td id="orariouscita_${x.id}">${orarioUscita}</td>
-                <td id="presenza_${x.id}"></td>
-                <td><button class="btn btn btn-outline-primary" id="editStudentLesson" onclick="document.getElementById('formAttendance').style.display='block'; addAttendance('${x.id}')">Edit</button></td>
-                <td><button class="btn btn-outline-danger" id="deleteStudentLesson">Delete</button></td>
+                <td id="orarioentrata_${x.id}">${orarioEntrataElement}</td>
+                <td id="orariouscita_${x.id}">${orarioUscitaElement}</td>
+                <td id="presenza_${x.id}">${presenzaElement}</td>
+                <td><button class="btn btn btn-outline-primary" id="editStudentLesson" onclick="document.getElementById('formAttendance').style.display='block'; addAttendance('${x.id}');">Aggiungi</button></td>
+                <td><button class="btn btn-outline-danger" id="deleteStudentLesson" onclick="deleteAttendancesView('${idRegister()}','${lessonId}','${x.id}')">Rimuovi</button></td>
                 <td id="grade_${x.id}">
-                    <button class="btn btn-outline-secondary" onclick="document.getElementById('gradeTable').style.display='block'; studentGrade('${x.id}')">Grade List</button>
+                    <button class="btn btn-outline-secondary" onclick="document.getElementById('gradeTable').style.display='block'; studentGrade('${x.id}')">Lista voti</button>
                 </td>
-                <td><button class="btn btn btn-outline-primary" id="addGrade" onclick="document.getElementById('formGrade').style.display='block'; addAttendance('${x.id}')">Add</button></td>
+                <td><button class="btn btn btn-outline-primary" id="addGrade" onclick="document.getElementById('formGrade').style.display='block'; addAttendance('${x.id}')">Aggiungi</button></td>
                 <td id="argomento"></td>
              </tr>      
             </tbody>
@@ -325,6 +336,7 @@ console.log(gradeStudent);
 
     // Inserire la stringa HTML nella tabella delle lezioni
     tableRegisterLesson.innerHTML = listHTML;
+    
 }
 
        // Funzione per creare la tabella delle lezioni per ogni registro
@@ -343,51 +355,39 @@ function deleteLessonStudents(idStudent){
     const studentIndex = registro.students.findIndex((student) => student.id === idStudent);
     registro.students.splice(studentIndex, 1);
     registerTableUI();
-        
     }
-    
 
-let studentId = ""
+    let studentId = ""
 function addAttendance(studentIdx){
     studentId = studentIdx
+    return studentId
 }
 
 
-// Ottenere il riferimento al form di registrazione presenze dal DOM
-let formAttendance = document.getElementById("formAttendance");
 
-// Aggiungere un gestore di eventi per l'invio del modulo di registrazione presenze
-const formAttendances = formAttendance.addEventListener("submit", function (e) {
-    // Impedire l'invio del modulo tradizionale
+const formAttendance = document.getElementById("formAttendance");
+
+formAttendance.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    // Ottenere i valori dei campi del modulo (orario di ingresso e uscita)
     let oraIngresso = document.getElementById("oraIngresso").value;
     let oraUscita = document.getElementById("oraUscita").value;
+    let presenza = document.getElementById("presenza").value
 
     // Aggiungere la registrazione della presenza allo studente per la lezione corrente
-    addAttendanceStudentToLesson(idRegister(), lessonId, studentId, oraIngresso, oraUscita);
-
-    // Ottenere i riferimenti agli elementi HTML per visualizzare i dati aggiornati
-    let orarioEntrataElement = document.getElementById(`orarioentrata_${studentId}`);
-    let orarioUscitaElement = document.getElementById(`orariouscita_${studentId}`);
-    let presenzaElement = document.getElementById(`presenza_${studentId}`);
-
-    // Aggiornare gli elementi HTML con i nuovi dati
-    if (orarioEntrataElement) {
-        orarioEntrataElement.innerHTML = oraIngresso;
-    }
-    if (orarioUscitaElement) {
-        orarioUscitaElement.innerHTML = oraUscita;
-    }
-    if (presenzaElement) {
-        // Impostare la presenza come "Presente"
-        presenzaElement.innerHTML = `<span>Presente</span>`;
-    }
-
-    // Stampare l'oggetto "registers" nella console dopo l'aggiornamento
-    console.log(registers);
+    addAttendanceStudentToLesson(idRegister(), lessonId, studentId, oraIngresso, oraUscita,presenza);
+    registerTableUI();
+    
 });
+
+function deleteAttendancesView(registerId, lessonId, studentId){
+    deleteAttendances(registerId, lessonId, studentId)
+    console.log(registers)
+    registerTableUI();
+}
+
+
+ 
 
 let formGrade = document.getElementById("formGrade");
 

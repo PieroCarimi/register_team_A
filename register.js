@@ -203,7 +203,7 @@ function removeGrade(registerId, gradeId) {
     }
 }
 
-function addAttendanceStudentToLesson(registerId, lessonId, studentId, entryTime, exitTime) {
+function addAttendanceStudentToLesson(registerId, lessonId, studentId, entryTime, exitTime,presence) {
     const register = registers.find(register => register.id === registerId);
 
     if (register) {
@@ -218,7 +218,8 @@ function addAttendanceStudentToLesson(registerId, lessonId, studentId, entryTime
                 register.lessonList[lessonIndex].attendance.push({
                     studentId: studentId,
                     entryTime: entryTime,
-                    exitTime: exitTime
+                    exitTime: exitTime,
+                    presence: presence
                 });
                 console.log("Attendance added successfully to register:", register.name);
             } else {
@@ -250,7 +251,8 @@ function getAttendances(registerId, lessonId, studentId) {
                         studentId: studentId,
                         studentName: student.name,
                         entryTime: studentAttendance.entryTime,
-                        exitTime: studentAttendance.exitTime
+                        exitTime: studentAttendance.exitTime,
+                        presence: studentAttendance.presence
                     };
                 } else {
                     console.log("Student not found with the specified ID");
