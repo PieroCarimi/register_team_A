@@ -120,13 +120,19 @@ function addLesson(registerId, lessonDate) {
     const register = registers.find(register => register.id === registerId);
 
     if (register) {
+        const searchLesson = register.lessonList.findIndex(data => data.lessonDate === lessonDate)
+        if(searchLesson === -1){
         const lesson = {
             lessonId: generateUniqueId(),
             lessonDate: lessonDate,
-            attendance: []
+            attendance: [],
+            arguments:""
         };
         register.lessonList.push(lesson);
         console.log("Lesson added successfully to register:", register.name);
+    }else{
+        console.log("A lesson already exists for this register on this date")
+    }
     } else {
         console.error("Register not found");
     }

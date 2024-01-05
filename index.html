@@ -90,7 +90,7 @@
             </div>
         </div>
     </div>
-
+    
     <div id="editStudentModal" class="w3-modal">
         <div class="w3-modal-content w-25 h-50 d-flex justify-content-center">
             <div class="w3-container">
@@ -213,8 +213,26 @@
         </div>
       </div>
     </div>
-
- </div>
+    <div id="modalArguments" class="w3-modal">
+        <div class="w3-modal-content w-25 h-50 d-flex justify-content-center">
+            <div class="w3-container">
+                <span onclick="document.getElementById('modalArguments').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                <form>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label for="valueArgomento" class="form-label"><h2>Argomento:</h2></label>
+                            <textarea name="comment" class="form-control" id="valueArgomento" name="valueArgomento"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-primary" onclick="ottieniArgomento()">Inserisci Argomento</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     
     <footer class="footer fixed-bottom">
         <div class="text-center p-4" style="background-color: black; color: white;">
