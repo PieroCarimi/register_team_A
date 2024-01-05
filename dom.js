@@ -192,14 +192,23 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
                     <th scope="col" class="text-center">Rimuovi Presenza</th>
                     <th scope="col" class="text-center">Lista voti</th>
                     <th scope="col" class="text-center">Aggiungi voto</th>
-                    <th scope="col" colspan="2" class="text-center">Argomento</th>
-                </tr>
+                    </tr>
             </thead>
             <tbody id="idbody">
             </tbody>
             </table>
-
-        `
+            <div class="card" id="cardArgomento" style="display:none;">
+            <div class="card-header">
+              <div class="d-flex align-items-center">
+                <h4>Argomento</h4>
+                <button type="button" class="btn btn-light" onclick="document.getElementById('modalArguments').style.display='block'"><i class="bi bi-pencil-square"></i></button>
+                <button type="button" class="btn btn-light"><i class="bi bi-x" style="font-size: 20px; color:red; cursor: pointer;" onclick="deleteArguments()"></i></button>
+            </div>
+            </div>
+            <div class="card-body">
+              <span id="testoArgomento"></span>
+            </div>
+           </div>`
         // Aggiorna il contenuto dell'elemento "registromateria" con la stringa HTML
         materia.innerHTML = listHTML;
         console.log(registers)
@@ -259,8 +268,17 @@ function registerTableUI(){
     const orderStudents = registro.students.slice().sort((a, b) => a.lastName.localeCompare(b.lastName));
 
     // Ottenere il riferimento all'elemento di visualizzazione della tabella delle lezioni
-    let ciao = document.getElementById("tableRegisterLessonDisplay");
-    ciao.style.display = "block";
+    let tableDisplay = document.getElementById("tableRegisterLessonDisplay");
+    tableDisplay.style.display = "block";
+    let cardArgomento = document.getElementById("cardArgomento");
+    if(registro.students.length>0){
+        cardArgomento.style.display = "block";
+    }
+    else{
+        cardArgomento.style.display = "none";
+    }
+    
+   
 
     // Trovare l'oggetto lezione corrispondente all'ID della lezione corrente
     let lessonRegister = registro.lessonList.find(lesson => lesson.lessonId === lessonId);
@@ -310,6 +328,12 @@ function registerTableUI(){
 
     console.log(registers);
 
+    let testoArgomento = document.getElementById("testoArgomento")
+    console.log(registerLessonDate.arguments)
+    console.log(testoArgomento)
+    testoArgomento.innerHTML = registerLessonDate.arguments
+
+
         
         // Costruire la stringa HTML per la riga della tabella
         listHTML += `<div class="container">
@@ -326,7 +350,7 @@ function registerTableUI(){
                     <button class="btn btn-outline-secondary" onclick="document.getElementById('gradeTable').style.display='block'; studentGrade('${x.id}')">Lista voti</button>
                 </td>
                 <td class="text-center align-middle"><button class="btn btn btn-outline-primary" id="addGrade" onclick="document.getElementById('formGrade').style.display='block'; addAttendance('${x.id}')">Aggiungi</button></td>
-                <td id="argomento" class="text-center align-middle"></td>
+               
              </tr>      
             </tbody>
         </table>
@@ -477,7 +501,28 @@ function removeSingleGrade(register_id, grade_id) {
     }
 }
 
+function ottieniArgomento(){
+    
+    let valueArgomento = document.getElementById("valueArgomento").value
+    let registro = registers.find(x => x.id === idRegister());
+    let lesson = registro.lessonList.find(x => x.lessonId === lessonId)
+    lesson.arguments = valueArgomento
+    console.log(lesson.arguments)
+    registerTableUI()
 
+}
+
+
+function deleteArguments(){
+    let registro = registers.find(x => x.id === idRegister());
+    let lesson = registro.lessonList.find(x => x.lessonId === lessonId)
+    lesson.arguments = ""
+    registerTableUI()
+
+}
+
+
+   
 
     
 
