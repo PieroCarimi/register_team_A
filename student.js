@@ -14,14 +14,13 @@ const deleteStudent = (idStudent) => {
     const index = students.findIndex((student) => student.id === idStudent);
     if (index !== -1 && registers.length > 0 ) {
         students.splice(index, 1);
-        deleteLessonStudents(idStudent)
         console.log(students);
-        studentUI();
+        
     }
     else if(index !== -1 && registers.length < 1){
         students.splice(index, 1);
         console.log(students);
-        studentUI();
+        
     }
     
 }

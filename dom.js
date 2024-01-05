@@ -98,7 +98,7 @@ const studentUI = () => {
             <td>${student.email}</td>
             <td>
                 <button onclick="editStudent('${student.id}')">Edit</button>
-                <button onclick="deleteStudent('${student.id}')">Delete</button>
+                <button onclick="deleteLessonStudents('${student.id}')">Delete</button>
             </td>
         `;
         studentTableBody.appendChild(row);
@@ -167,8 +167,8 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
         <div class="d-flex justify-content-center mt-4">
             <div class="row">
                 <br>
-                <h1>${name}</h1>
-                <p style="font-size:10px">${id}</p>
+                <h1 class="text-center">${name}</h1>
+                <p class="text-center" style="font-size:10px">${id}</p>
             </div>
         </div>
         <button type="button" class="btn btn-primary" onclick="document.getElementById('connectedStudentToRegister').style.display='block'">addStudent</button>
@@ -179,6 +179,7 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
         <!-- Aggiunta tabella per registro -->
         <ul class="dropdown-menu" id="lessonDropDown">
         </ul>
+        <h3 class="text-center" id="currentDate"></h3>
         <table class="table table-striped mt-4" style="display: none;" id="tableRegisterLessonDisplay">
             <thead>
                 <tr>
@@ -220,14 +221,27 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
       function ottieniData() {
         const calendarioInput = document.getElementById('calendarioInput');
         const dataSelezionata = calendarioInput.value;
-        console.log(idRegister())
-        const searchRegister = registers.find(x => x.id === idregistro)
-        addLesson(idRegister(),dataSelezionata)
-        //searchRegister.lessonList.push(dataSelezionata)
-        console.log(registers)
-        console.log(`Data selezionata: ${dataSelezionata}`);
-        return dataSelezionata
-      }
+    
+        // Converti la data da formato stringa a oggetto Date
+        const data = new Date(dataSelezionata);
+    
+        // Estrai giorno, mese e anno dalla data
+        const giorno = data.getDate().toString().padStart(2, '0');
+        const mese = (data.getMonth() + 1).toString().padStart(2, '0'); // Mese è zero-based, quindi aggiungi 1
+        const anno = data.getFullYear();
+    
+        // Formatta la data nel formato desiderato (giorno-mese-anno)
+        const dataFormattata = `${giorno}-${mese}-${anno}`;
+    
+        console.log(idRegister());
+        const searchRegister = registers.find(x => x.id === idregistro);
+        addLesson(idRegister(), dataFormattata);
+    
+        console.log(registers);
+        console.log(`Data selezionata: ${dataFormattata}`);
+        return dataFormattata;
+    }
+    
 
       let lessonId = ""  // id dinamico per le lezioni
       function lessonDropDown() {  //Ordinare per più recenti le date delle lezioni
@@ -295,6 +309,10 @@ function registerTableUI(){
         let registerLessonDate = registro.lessonList.find(x => x.lessonId === lessonId)
         console.log(registerLessonDate)
         console.log(studentId)
+
+        let currentDate = document.getElementById("currentDate");
+        currentDate.innerHTML = registerLessonDate.lessonDate;
+
         let gradeStudent = registro.gradeList.find(grade => grade.idStudent === studentId && grade.gradeDate === registerLessonDate.lessonDate);
         let insertGrade;
         if(gradeStudent){
@@ -338,7 +356,12 @@ function registerTableUI(){
         // Costruire la stringa HTML per la riga della tabella
         listHTML += `<div class="container">
             <tr>
-                <td class="text-center align-middle">${x.id}</td>
+                <td class="text-center align-middle">
+                    <div style="display: flex; align-items: center;">
+                        <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteStudentFromRegister('${idRegister()}','${x.id}')"></i>
+                        <span style="margin-left: 5px;">${x.id}</span>
+                    </div>
+                </td>
                 <td class="text-center align-middle">${x.name}</td>
                 <td class="text-center align-middle">${x.lastName}</td>
                 <td id="orarioentrata_${x.id}" class="text-center align-middle">${orarioEntrataElement}</td>
@@ -373,13 +396,18 @@ function lessonTable(x) {
 }
 
 
-function deleteLessonStudents(idStudent){
-    removeStudent(idRegister,idStudent)
-    let registro = registers.find(x => x.id === idRegister())
-    const studentIndex = registro.students.findIndex((student) => student.id === idStudent);
-    registro.students.splice(studentIndex, 1);
+function deleteStudentFromRegister(register_id, student_id){
+    removeStudent(register_id, student_id);
     registerTableUI();
-    }
+}
+
+
+function deleteLessonStudents(idStudent){
+    deleteStudent(idStudent)
+    removeStudent(idRegister(),idStudent)
+    studentUI();
+    registerTableUI();
+}
 
     let studentId = ""
 function addAttendance(studentIdx){
@@ -520,18 +548,3 @@ function deleteArguments(){
     registerTableUI()
 
 }
-
-
-   
-
-    
-
-
-    
-       
-       
-    
-    
-
-
-
