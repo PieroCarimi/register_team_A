@@ -59,7 +59,6 @@ function connectStudentToRegister(studentId, registerId) {
         // Controlla se lo studente non è già registrato
         if (!register.students.includes(student)) {
             register.students.push(student);
-            registerTableUI();
         } else {
             console.log("Lo studente è già registrato a questo registro.");
         }

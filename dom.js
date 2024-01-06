@@ -9,14 +9,21 @@ formMatter.addEventListener("submit", function(e) {
         listHTML += `
             <div class="d-flex">
                 <li style="margin-right: 6px;">${x.id}</li>
-                <li style="margin-right: 6px; cursor: pointer;" onclick="registerView('${x.id}', '${x.name}')">${x.name}</li>
+                <li style="margin-right: 6px; cursor: pointer;" onclick="registerView('${x.id}', '${x.name}'); isLessonManuallyOpened = false;">${x.name}</li>
                 <i class="bi bi-pencil" style="color:blue;" onclick="editName('${x.id}')"></i>
                 <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteRegister('${x.id}')"></i>
             </div>`;
     });
     matterList.innerHTML = listHTML;
+    closeModalCreateRegister();
     console.log(registers)
 });
+
+function closeModalCreateRegister(){
+    document.getElementById('id01').style.display = 'none';
+    let formInputMatter = document.getElementById("formInputMatter");
+    formInputMatter.value = "";
+}
 
 function editName(id) {
     // Chiedi all'utente di inserire il nuovo nome per la materia
@@ -74,9 +81,28 @@ formStudent.addEventListener("submit", function(e) {
     let formNameStudent = document.getElementById("studentName");
     let formLastNameStudent = document.getElementById("studentLastname");
     let formEmailStudent = document.getElementById("studenteEmail");
-    createStudent(formNameStudent.value, formLastNameStudent.value, formEmailStudent.value);
-    console.log(formNameStudent.value, formLastNameStudent.value, formEmailStudent.value);
+    let formPhoneStudent = document.getElementById("studentPhone");
+    console.log(formNameStudent.value, formLastNameStudent.value, formEmailStudent.value,formPhoneStudent.value);
+    createStudent(formNameStudent.value, formLastNameStudent.value, formEmailStudent.value,formPhoneStudent.value);
+    console.log(formNameStudent.value, formLastNameStudent.value, formEmailStudent.value,formPhoneStudent.value);
+    closeModalCreateStudent();
+    console.log(isLessonManuallyOpened)
 });
+
+
+function closeModalCreateStudent(){
+    document.getElementById('id02').style.display = 'none';
+    let formNameStudent = document.getElementById("studentName");
+    let formLastNameStudent = document.getElementById("studentLastname");
+    let formEmailStudent = document.getElementById("studenteEmail");
+    let formPhoneStudent = document.getElementById("studentPhone");
+
+    formNameStudent.value = "";
+    formLastNameStudent.value = "";
+    formEmailStudent.value = "";
+    formPhoneStudent.value = "";
+}
+
 
 const getSortedStudentList = () => {
     return students.slice().sort((a, b) => a.lastName.localeCompare(b.lastName));
@@ -96,6 +122,7 @@ const studentUI = () => {
             <td>${student.name}</td>
             <td>${student.lastName}</td>
             <td>${student.email}</td>
+            <td>${student.phoneNumber}</td>
             <td>
                 <button onclick="editStudent('${student.id}')">Edit</button>
                 <button onclick="deleteLessonStudents('${student.id}')">Delete</button>
@@ -114,6 +141,7 @@ function editStudent(id) {
         document.getElementById("editStudentName").value = currentEditingStudent.name;
         document.getElementById("editStudentLastName").value = currentEditingStudent.lastName;
         document.getElementById("editStudentEmail").value = currentEditingStudent.email;
+        document.getElementById("editStudentPhone").value = currentEditingStudent.phoneNumber;
 
         // Visualizza il modale per la modifica dello studente
         document.getElementById('editStudentModal').style.display = 'block';
@@ -134,15 +162,20 @@ function saveEditedStudentModal() {
         const editedName = document.getElementById("editStudentName").value;
         const editedLastName = document.getElementById("editStudentLastName").value;
         const editedEmail = document.getElementById("editStudentEmail").value;
+        const editedPhone = document.getElementById("editStudentPhone").value
 
         // Aggiorna lo studente
-        updateStudent(id, editedName, editedLastName, editedEmail);
+        updateStudent(id, editedName, editedLastName, editedEmail, editedPhone);
 
         // Chiudi il modal dopo aver salvato le modifiche
         closeEditStudentModal();
 
         // Aggiorna la tabella degli studenti nella pagina principale
         studentUI();
+        const tableId = document.getElementById("tableRegisterLessonDisplay");
+        if(tableId){
+            registerTableUI();
+        }
     } else {
         console.log("Studente non trovato.");
     }
@@ -202,7 +235,7 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
             <div class="card-header">
               <div class="d-flex align-items-center">
                 <h4>Argomento</h4>
-                <button type="button" class="btn btn-light" onclick="document.getElementById('modalArguments').style.display='block'"><i class="bi bi-pencil-square"></i></button>
+                <button type="button" class="btn btn-light" onclick="document.getElementById('modalArguments').style.display='block'; argumentValue()"><i class="bi bi-pencil-square"></i></button>
                 <button type="button" class="btn btn-light"><i class="bi bi-x" style="font-size: 20px; color:red; cursor: pointer;" onclick="deleteArguments()"></i></button>
             </div>
             </div>
@@ -217,6 +250,38 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
 }
       // Definizione della funzione "idRegister" che restituisce il valore corrente di "idregistro"
       function idRegister (){return idregistro}
+
+      function connectStudentToSingleRegister(studentId, registerId) {
+        connectStudentToRegister(studentId, registerId);
+    
+        // Controlla se è aperta una lezione per quella materia e se è stata aperta manualmente
+        if (lessonId !== null && lessonId !== "" && isLessonManuallyOpened) {
+            let registro = registers.find(x => x.id === idRegister());
+            let lessonRegister = registro.lessonList.find(lesson => lesson.lessonId === lessonId);
+    
+            // Verifica se l'oggetto lezione e la proprietà attendance sono definiti
+            if (lessonRegister && lessonRegister.attendance) {
+                registerTableUI();
+                //isLessonManuallyOpened = false;
+            } else {
+                console.error("L'oggetto lezione o la proprietà attendance non sono definiti.");
+            }
+            
+            isLessonManuallyOpened = false; // Resetta la variabile dopo aver visualizzato la lezione
+        }
+    }
+
+function closeModalConnectedStudentToRegister(){
+    document.getElementById('connectedStudentToRegister').style.display = 'none';
+    const idStudent = document.getElementById("idStudent");
+    idStudent.value = "";
+}
+
+function closeModalAddLesson(){
+    document.getElementById("addLesson").style.display = "none";
+    const calendarioInput = document.getElementById("calendarioInput");
+    calendarioInput.value = ""; 
+}
     
       function ottieniData() {
         const calendarioInput = document.getElementById('calendarioInput');
@@ -386,12 +451,13 @@ function registerTableUI(){
     
 }
 
+let isLessonManuallyOpened = false;
        // Funzione per creare la tabella delle lezioni per ogni registro
 function lessonTable(x) {
     // Impostare l'ID della lezione corrente
     lessonId = x;
     console.log(lessonId);
-
+    isLessonManuallyOpened = true;
     registerTableUI();
 }
 
@@ -469,8 +535,14 @@ const formGrades = formGrade.addEventListener("submit", function (e) {
 
     // Stampare l'oggetto "registers" nella console dopo l'aggiornamento
     console.log(registers);
+    closeModalFormGrade();
 });
 
+function closeModalFormGrade(){
+    document.getElementById('formGrade').style.display = 'none';
+    let voto = document.getElementById("voto");
+    voto.value = "";
+}
    
 const studentGrade = (studentId) => {
     const studentTableBody = document.getElementById('studentTableBodyGrade');
@@ -538,6 +610,27 @@ function ottieniArgomento(){
     console.log(lesson.arguments)
     registerTableUI()
 
+}
+
+function closeModalArguments() {
+    document.getElementById('modalArguments').style.display = 'none';
+}
+
+
+function argumentValue(){
+    let registro = registers.find(x => x.id === idRegister());
+    let lesson = registro.lessonList.find(x => x.lessonId === lessonId);
+    let valueArgomento = document.getElementById("valueArgomento");
+
+    // Pulisci completamente il campo del form
+    
+
+    // Imposta il valore del campo con l'argomento corrente, se presente
+    if (lesson.arguments !== "") {
+        valueArgomento.value = lesson.arguments;
+    }else{
+        valueArgomento.value = "";
+    }
 }
 
 
