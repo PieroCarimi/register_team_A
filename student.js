@@ -1,10 +1,11 @@
 const students = []
-const createStudent = (name, lastName, email) => {
+const createStudent = (name, lastName, email, phoneNumber) => {
     const newStudent = {
         id: generateUniqueId(),
         name,
         lastName,
         email,
+        phoneNumber,
         lectures: []
     };
     students.push(newStudent);
@@ -25,15 +26,16 @@ const deleteStudent = (idStudent) => {
     
 }
 
-const updateStudent = (idStudent, name, lastName, email) => {
+const updateStudent = (idStudent, name, lastName, email, phoneNumber) => {
     const studentIndex = students.findIndex((s) => s.id === idStudent);
     if (studentIndex !== -1) {
         students[studentIndex].name = name;
         students[studentIndex].lastName = lastName;
         students[studentIndex].email = email;
-        studentUI();
+        students[studentIndex].phoneNumber = phoneNumber;
+        //studentUI();
         console.log(students);
-        registerTableUI();
+        //registerTableUI();
     } else {
         console.log("Studente non trovato.");
     }
