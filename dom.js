@@ -558,14 +558,13 @@ function deleteAttendancesView(registerId, lessonId, studentId){
           if(student.gradeDate === lessonIdDate ){
             // Se la condizione è verificata, chiama la funzione `removeGrade` per eliminare la valutazione dello studente.
               removeGrade(registerId,student.gradeId)
-              // Aggiorna l'interfaccia utente del registro chiamando la funzione `registerTableUI`.
-              registerTableUI();
           }
-        })
+    })
+    // Aggiorna l'interfaccia utente del registro chiamando la funzione `registerTableUI`.
+    registerTableUI();
 }
 
 
- 
 
 let formGrade = document.getElementById("formGrade");
 
