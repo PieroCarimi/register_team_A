@@ -18,7 +18,7 @@ function updateRegister(registerId, newName) {
 
     if (registerToUpdate) {
         registerToUpdate.name = newName;
-        updateUI();
+        //updateUI();
         console.log(registers)
         return registerToUpdate;
     } else {
@@ -33,7 +33,6 @@ function deleteRegister(registerId) {
     if (registerIndex !== -1) {
         registers.splice(registerIndex, 1);
         console.log("Register deleted successfully");
-        updateUI(); // Aggiorna l'interfaccia utente dopo la cancellazione
     } else {
         console.error("Register not found");
     }

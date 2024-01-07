@@ -22,22 +22,28 @@ function idUpdateRegister(idx) {
 function editNameRegister(){
     let editRegister = document.getElementById("editRegister").value
     console.log(editRegister)
-    // Cerca il registro all'interno dell'array 'registers' che ha l'id corrispondente a quello memorizzato nella variabile 'id'.
-    let registerToUpdate = registers.find(x => x.id === id);s
-    // Se il registro è stato trovato, aggiorna il suo attributo 'name' con il valore di 'editRegister'.
-    if (registerToUpdate) {
-        registerToUpdate.name = editRegister;
+
+    let registro = getRegister(id);
+
+    if (editRegister === "") {
+        alert("Il nome del registro non può essere vuoto");
+        return; // Esce dalla funzione senza inviare il form
     }
+    
+    updateRegister(id, editRegister);
+
+    const sortedRegisters = [...registers];
+    sortedRegisters.sort((a, b) => a.name.localeCompare(b.name));
     
     // Aggiorna l'HTML della lista
     let listHTML = "";
-    registers.forEach(function(x) {
+    sortedRegisters.forEach(function(x) {
         listHTML += `
             <div class="d-flex">
                 <li style="margin-right: 6px;">${x.id}</li>
                 <li style="margin-right: 6px; cursor: pointer;" onclick="registerView('${x.id}', '${x.name}')">${x.name}</li>
-                <i class="bi bi-pencil" style="color:blue;" onclick="idUpdateRegister('${x.id}');registerView('${registerToUpdate.id}', '${registerToUpdate.name }')"></i>
-                <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteRegister('${x.id}')"></i>
+                <i class="bi bi-pencil" style="color:blue;" onclick="idUpdateRegister('${x.id}');registerView('${registro.id}', '${registro.name}')"></i>
+                <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteSingleRegister('${x.id}')"></i>
             </div>`;
     });
     
@@ -55,13 +61,16 @@ function updateUI() {
     let listHTML = "";
     let currentlyViewedRegister = getCurrentlyViewedRegister(); // Assume che tu abbia una funzione che restituisce il registro attualmente visualizzato
 
-    registers.forEach(function (x) {
+    const sortedRegisters = [...registers];
+    sortedRegisters.sort((a, b) => a.name.localeCompare(b.name));
+
+    sortedRegisters.forEach(function (x) {
         listHTML += `
             <div class="d-flex">
                 <li style="margin-right: 6px;">${x.id}</li>
                 <li style="margin-right: 6px; cursor: pointer;" onclick="registerView('${x.id}', '${x.name}')">${x.name}</li>
                 <i class="bi bi-pencil" style="color:blue;" onclick="idUpdateRegister('${x.id}');document.getElementById('formEditRegister').style.display='block';"></i>
-                <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteRegister('${x.id}')"></i>
+                <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteSingleRegister('${x.id}')"></i>
             </div>`;
     });
 
@@ -71,6 +80,16 @@ function updateUI() {
     if (currentlyViewedRegister) {
         registerView(currentlyViewedRegister.id, currentlyViewedRegister.name);
     }
+}
+
+function deleteSingleRegister(register_id){
+    deleteRegister(register_id);
+    // Rimuovi l'HTML associato dalla pagina
+    const materia = document.getElementById("registromateria");
+    materia.innerHTML = "";
+
+    // Aggiorna l'interfaccia utente
+    updateUI();
 }
 
 let formStudent = document.getElementById("insertStudent")
@@ -161,6 +180,11 @@ function saveEditedStudentModal() {
         const editedLastName = document.getElementById("editStudentLastName").value;
         const editedEmail = document.getElementById("editStudentEmail").value;
         const editedPhone = document.getElementById("editStudentPhone").value
+
+        if (editedName === "" || editedLastName === "") {
+            alert("Il nome e il cognome non possono essere vuoti.");
+            return; // Esce dalla funzione senza inviare il form
+        }
 
         // Aggiorna lo studente
         updateStudent(id, editedName, editedLastName, editedEmail, editedPhone);
