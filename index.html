@@ -35,8 +35,8 @@
                     <div class="w3-container">
                         <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                        <form id="formMatter">
-                       <label for="fname">Materia:</label><br>
-                       <input type="text" id="formInputMatter" name="formMatter" class="form-control"><br>
+                       <label for="formInputMatter">Materia:</label><br>
+                       <input type="text" id="formInputMatter" name="formMatter" class="form-control" required><br>
                        <input type="submit" class="btn btn-primary" value="Crea">
                        </form>
                     </div>
@@ -44,7 +44,11 @@
             </div>
         </div>
     </nav>
+
         <div class="container">
+
+            <span id="registromateria"></span><br>
+
             <div class="w3-container ms-auto" onsubmit="return false">
             <div id="formEditRegister" class="w3-modal">
                 <div class="w3-modal-content w-25 h-25 d-flex justify-content-center">
@@ -57,7 +61,7 @@
                         
                         <div class="form-group" style="margin-bottom: 10px;">
     
-                            <input type="text" class="form-control" id="editRegister" name="editRegister"required>
+                            <input type="text" class="form-control" id="editRegister" name="editRegister" required>
                         </div>
                     
                         <button type="submit" class="btn btn-primary" onclick="editNameRegister();">Invia</button>
@@ -67,24 +71,23 @@
                 </div>
               </div>
             </div>
-        <span id="registromateria"></span>
-        <br>
+        
     <div class="w3-container ms-auto">
         <div id="id02" class="w3-modal">
             <div class="w3-modal-content w-25 h-50 d-flex justify-content-center">
                 <div class="w3-container">
                     <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                     <form id="insertStudent">
-                        <label for="fname">Nome:</label><br>
-                        <input type="text" id="studentName" name="formName" class="form-control"><br>
+                        <label for="studentName">Nome:</label><br>
+                        <input type="text" id="studentName" name="formName" class="form-control" required><br>
     
-                        <label for="lname">Cognome:</label><br>
-                        <input type="text" id="studentLastname" name="formLastname" class="form-control"><br>
+                        <label for="studentLastname">Cognome:</label><br>
+                        <input type="text" id="studentLastname" name="formLastname" class="form-control" required><br>
     
-                        <label for="email">Email:</label><br>
+                        <label for="studenteEmail">Email:</label><br>
                         <input type="email" id="studenteEmail" name="formEmail" class="form-control"><br>
 
-                        <label for="formPhone">Telefono:</label><br>
+                        <label for="studentPhone">Telefono:</label><br>
                         <input type="text" id="studentPhone" name="formPhone" class="form-control" pattern="0[0-9]*|[1-9][0-9]*">
     
                         <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Crea</button>
@@ -123,15 +126,15 @@
                 <span onclick="closeEditStudentModal()" class="w3-button w3-display-topright">&times;</span>
                 <form id="editStudentForm">
                     <label for="editStudentName">Nome:</label><br>
-                    <input type="text" id="editStudentName" name="editStudentName" class="form-control" placeholder="Enter new name"><br>
+                    <input type="text" id="editStudentName" name="editStudentName" class="form-control" placeholder="Enter new name" required><br>
     
                     <label for="editStudentLastName">Cognome:</label><br>
-                    <input type="text" id="editStudentLastName" name="editStudentLastName" class="form-control" placeholder="Enter new lastname"><br>
+                    <input type="text" id="editStudentLastName" name="editStudentLastName" class="form-control" placeholder="Enter new lastname" required><br>
     
                     <label for="editStudentEmail">Email:</label><br>
                     <input type="email" id="editStudentEmail" name="editStudentEmail" class="form-control" placeholder="Enter new email"><br>
 
-                    <label for="formPhone">Telefono:</label><br>
+                    <label for="editStudentPhone">Telefono:</label><br>
                     <input type="text" id="editStudentPhone" name="formPhone" class="form-control" pattern="0[0-9]*|[1-9][0-9]*">
     
                     <button type="button" class="btn btn-primary" style="margin-top: 10px;" onclick="saveEditedStudentModal()">Salva</button>
@@ -163,7 +166,7 @@
                     <div class="row mb-3">
                         <div class="col-12">
                             <label for="calendarioInput" class="form-label"><h2>Select a date:</h2></label>
-                            <input type="date" class="form-control" id="calendarioInput" name="calendarioInput">
+                            <input type="date" class="form-control" id="calendarioInput" name="calendarioInput" required>
                         </div>
                     </div>
                     <div class="row">

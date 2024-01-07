@@ -18,7 +18,7 @@ function updateRegister(registerId, newName) {
 
     if (registerToUpdate) {
         registerToUpdate.name = newName;
-        updateUI();
+        //updateUI();
         console.log(registers)
         return registerToUpdate;
     } else {
@@ -33,7 +33,6 @@ function deleteRegister(registerId) {
     if (registerIndex !== -1) {
         registers.splice(registerIndex, 1);
         console.log("Register deleted successfully");
-        updateUI(); // Aggiorna l'interfaccia utente dopo la cancellazione
     } else {
         console.error("Register not found");
     }
@@ -208,7 +207,7 @@ function removeGrade(registerId, gradeId) {
     }
 }
 
-function addAttendanceStudentToLesson(registerId, lessonId, studentId, entryTime, exitTime,presence) {
+function addAttendanceStudentToLesson(registerId, lessonId, studentId, entryTime, exitTime, presence) {
     const register = registers.find(register => register.id === registerId);
 
     if (register) {
@@ -277,7 +276,7 @@ function getAttendances(registerId, lessonId, studentId) {
     }
 }
 
-function updateAttendances(registerId, lessonId, studentId, entryTime, exitTime) {
+function updateAttendances(registerId, lessonId, studentId, entryTime, exitTime, presence) {
     const register = registers.find(register => register.id === registerId);
 
     if (register) {
@@ -290,7 +289,8 @@ function updateAttendances(registerId, lessonId, studentId, entryTime, exitTime)
                 register.lessonList[lessonIndex].attendance[studentAttendanceIndex] = {
                     studentId: studentId,
                     entryTime: entryTime,
-                    exitTime: exitTime
+                    exitTime: exitTime,
+                    presence: presence
                 };
                 console.log("Attendance updated successfully in register:", register.name);
             } else {
