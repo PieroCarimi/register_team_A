@@ -3,18 +3,7 @@ formMatter.addEventListener("submit", function(e) {
     e.preventDefault();
     let formInputMatter = document.getElementById("formInputMatter")
     createRegister(formInputMatter.value)
-    let matterList = document.getElementById("matterList")
-    let listHTML = "";
-    registers.forEach(function(x) {
-        listHTML += `
-            <div class="d-flex">
-                <li style="margin-right: 6px;">${x.id}</li>
-                <li style="margin-right: 6px; cursor: pointer;" onclick="registerView('${x.id}', '${x.name}'); isLessonManuallyOpened = false;">${x.name}</li>
-                <i class="bi bi-pencil" style="color:blue;" onclick="editName('${x.id}')"></i>
-                <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteRegister('${x.id}')"></i>
-            </div>`;
-    });
-    matterList.innerHTML = listHTML;
+    updateUI()
     closeModalCreateRegister();
     console.log(registers)
 });
@@ -24,17 +13,20 @@ function closeModalCreateRegister(){
     let formInputMatter = document.getElementById("formInputMatter");
     formInputMatter.value = "";
 }
+// La funzione 'idUpdateRegister' prende un indice 'idx' come argomento e assegna il suo valore alla variabile globale 'id'.
+let id = ""
+function idUpdateRegister(idx) {
+   id = idx
+}
 
-function editName(id) {
-    // Chiedi all'utente di inserire il nuovo nome per la materia
-    let newName = prompt("Inserisci il nuovo nome per la materia:");
-    
-    // Trova l'oggetto corrispondente nella lista registers
-    let registerToUpdate = registers.find(x => x.id === id);
-    
-    // Aggiorna il campo name con il nuovo nome
+function editNameRegister(){
+    let editRegister = document.getElementById("editRegister").value
+    console.log(editRegister)
+    // Cerca il registro all'interno dell'array 'registers' che ha l'id corrispondente a quello memorizzato nella variabile 'id'.
+    let registerToUpdate = registers.find(x => x.id === id);s
+    // Se il registro è stato trovato, aggiorna il suo attributo 'name' con il valore di 'editRegister'.
     if (registerToUpdate) {
-        registerToUpdate.name = newName;
+        registerToUpdate.name = editRegister;
     }
     
     // Aggiorna l'HTML della lista
@@ -44,35 +36,41 @@ function editName(id) {
             <div class="d-flex">
                 <li style="margin-right: 6px;">${x.id}</li>
                 <li style="margin-right: 6px; cursor: pointer;" onclick="registerView('${x.id}', '${x.name}')">${x.name}</li>
-                <i class="bi bi-pencil" style="color:blue;" onclick="editName('${x.id}')"></i>
+                <i class="bi bi-pencil" style="color:blue;" onclick="idUpdateRegister('${x.id}');registerView('${registerToUpdate.id}', '${registerToUpdate.name }')"></i>
                 <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteRegister('${x.id}')"></i>
             </div>`;
     });
     
-    // Aggiorna l'HTML della lista nel DOM
-    matterList.innerHTML = listHTML;
-    
-    // Aggiorna l'interfaccia utente (se necessario)
+    // Aggiorna l'interfaccia utente 
     updateUI();
-    
-    console.log(id);
-    console.log(registers);
+    document.getElementById("formEditRegister").style.display = "none" //impostare il modale dell'update del registro a display none
 }
 
+function getCurrentlyViewedRegister() {
+    // Restituisci il registro attualmente visualizzato
+       return registers.find(x => x.id === id);
+   }
 
 function updateUI() {
     let listHTML = "";
+    let currentlyViewedRegister = getCurrentlyViewedRegister(); // Assume che tu abbia una funzione che restituisce il registro attualmente visualizzato
+
     registers.forEach(function (x) {
         listHTML += `
             <div class="d-flex">
                 <li style="margin-right: 6px;">${x.id}</li>
                 <li style="margin-right: 6px; cursor: pointer;" onclick="registerView('${x.id}', '${x.name}')">${x.name}</li>
-                <i class="bi bi-pencil" style="color:blue;" onclick="editName('${x.id}')"></i>
+                <i class="bi bi-pencil" style="color:blue;" onclick="idUpdateRegister('${x.id}');document.getElementById('formEditRegister').style.display='block';"></i>
                 <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteRegister('${x.id}')"></i>
             </div>`;
-            registerView(x.id,x.name)
     });
+
     matterList.innerHTML = listHTML;
+
+    // Ripristina la visualizzazione del registro corrente
+    if (currentlyViewedRegister) {
+        registerView(currentlyViewedRegister.id, currentlyViewedRegister.name);
+    }
 }
 
 let formStudent = document.getElementById("insertStudent")
@@ -262,12 +260,13 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
             // Verifica se l'oggetto lezione e la proprietà attendance sono definiti
             if (lessonRegister && lessonRegister.attendance) {
                 registerTableUI();
-                //isLessonManuallyOpened = false;
+                isLessonManuallyOpened = true;
             } else {
                 console.error("L'oggetto lezione o la proprietà attendance non sono definiti.");
+               isLessonManuallyOpened = false; // Resetta la variabile dopo aver visualizzato la lezione
             }
             
-            isLessonManuallyOpened = false; // Resetta la variabile dopo aver visualizzato la lezione
+            
         }
     }
 
@@ -494,14 +493,43 @@ formAttendance.addEventListener("submit", function (e) {
 
     // Aggiungere la registrazione della presenza allo studente per la lezione corrente
     addAttendanceStudentToLesson(idRegister(), lessonId, studentId, oraIngresso, oraUscita,presenza);
+    closeModalConnectedStudentToRegister()
     registerTableUI();
-    
 });
+
+// Questa funzione viene chiamata per chiudere il modal (o finestra modale) relativo alla registrazione degli studenti collegati.
+
+function closeModalConnectedStudentToRegister() {
+    // Nasconde l'elemento del modulo di registrazione degli studenti.
+    document.getElementById('formAttendance').style.display = 'none';
+
+    // Resetta il valore del campo 'oraIngresso' a una stringa vuota.
+    document.getElementById('oraIngresso').value = '';
+
+    // Resetta il valore del campo 'oraUscita' a una stringa vuota.
+    document.getElementById('oraUscita').value = '';
+
+    // Imposta la proprietà 'checked' del campo 'presenza' a falso, deselezionando la casella di controllo.
+    document.getElementById('presenza').checked = false;
+}
+
+
 
 function deleteAttendancesView(registerId, lessonId, studentId){
     deleteAttendances(registerId, lessonId, studentId)
-    console.log(registers)
-    registerTableUI();
+    const gradeStudentList = registers.find(x => x.id === idRegister()).gradeList;
+    const oggettiFiltrati = gradeStudentList.filter((oggetto) => oggetto.idStudent === studentId);
+    let registro = registers.find(x => x.id === idRegister());
+    let lessonIdDate =  registro.lessonList.find(x => x.lessonId === lessonId).lessonDate
+    oggettiFiltrati.forEach(student => {
+        // Verifica se la data della valutazione coincide con la data della lezione.
+          if(student.gradeDate === lessonIdDate ){
+            // Se la condizione è verificata, chiama la funzione `removeGrade` per eliminare la valutazione dello studente.
+              removeGrade(registerId,student.gradeId)
+              // Aggiorna l'interfaccia utente del registro chiamando la funzione `registerTableUI`.
+              registerTableUI();
+          }
+        })
 }
 
 
@@ -543,7 +571,7 @@ function closeModalFormGrade(){
     let voto = document.getElementById("voto");
     voto.value = "";
 }
-   
+
 const studentGrade = (studentId) => {
     const studentTableBody = document.getElementById('studentTableBodyGrade');
     
@@ -575,7 +603,7 @@ const studentGrade = (studentId) => {
     oggettiFiltrati.sort((a, b) => new Date(a.gradeDate) - new Date(b.gradeDate));
 
     console.log(oggettiFiltrati);
-
+    
     oggettiFiltrati.forEach(student => {
         const row = document.createElement('tr');
         row.id = `gradeRow_${student.gradeId}`; // Aggiungi un ID unico basato sull'ID del voto
@@ -593,7 +621,6 @@ const studentGrade = (studentId) => {
 function removeSingleGrade(register_id, grade_id) {
     // Rimuovi il voto dal registro
     removeGrade(register_id, grade_id);
-
     // Se la rimozione è avvenuta con successo, aggiorna solo la riga associata al voto
     const rowToRemove = document.getElementById(`gradeRow_${grade_id}`);
     if (rowToRemove) {

@@ -6,7 +6,7 @@ const createStudent = (name, lastName, email, phoneNumber) => {
         lastName,
         email,
         phoneNumber,
-        lectures: []
+       // lectures: []
     };
     students.push(newStudent);
 };
