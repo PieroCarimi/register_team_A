@@ -16,7 +16,7 @@
     <script defer src="register.js"></script>
     <script defer src="dom.js"></script>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-lg navbar-light bg-light text-center">
         <a class="navbar-brand" href="#" style="font-size:30px; margin-left: 10px;">Register</a>
         <div class="dropdown">
@@ -45,6 +45,28 @@
         </div>
     </nav>
         <div class="container">
+            <div class="w3-container ms-auto" onsubmit="return false">
+            <div id="formEditRegister" class="w3-modal">
+                <div class="w3-modal-content w-25 h-25 d-flex justify-content-center">
+                  <div class="w3-container">
+                    <span onclick="document.getElementById('formEditRegister').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+                    
+                    <h3>Modifica Registro</h3>
+                    
+                    <form>
+                        
+                        <div class="form-group" style="margin-bottom: 10px;">
+    
+                            <input type="text" class="form-control" id="editRegister" name="editRegister"required>
+                        </div>
+                    
+                        <button type="submit" class="btn btn-primary" onclick="editNameRegister();">Invia</button>
+                       
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
         <span id="registromateria"></span>
         <br>
     <div class="w3-container ms-auto">
@@ -242,7 +264,7 @@
         </div>
     </div>
     
-    <footer class="footer fixed-bottom">
+    <footer class="mt-auto">
         <div class="text-center p-4" style="background-color: black; color: white;">
             Copyright 2024 - Team A
         </div>
