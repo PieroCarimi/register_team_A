@@ -207,7 +207,7 @@ function removeGrade(registerId, gradeId) {
     }
 }
 
-function addAttendanceStudentToLesson(registerId, lessonId, studentId, entryTime, exitTime,presence) {
+function addAttendanceStudentToLesson(registerId, lessonId, studentId, entryTime, exitTime, presence) {
     const register = registers.find(register => register.id === registerId);
 
     if (register) {
@@ -276,7 +276,7 @@ function getAttendances(registerId, lessonId, studentId) {
     }
 }
 
-function updateAttendances(registerId, lessonId, studentId, entryTime, exitTime) {
+function updateAttendances(registerId, lessonId, studentId, entryTime, exitTime, presence) {
     const register = registers.find(register => register.id === registerId);
 
     if (register) {
@@ -289,7 +289,8 @@ function updateAttendances(registerId, lessonId, studentId, entryTime, exitTime)
                 register.lessonList[lessonIndex].attendance[studentAttendanceIndex] = {
                     studentId: studentId,
                     entryTime: entryTime,
-                    exitTime: exitTime
+                    exitTime: exitTime,
+                    presence: presence
                 };
                 console.log("Attendance updated successfully in register:", register.name);
             } else {

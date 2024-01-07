@@ -514,9 +514,17 @@ formAttendance.addEventListener("submit", function (e) {
     let oraIngresso = document.getElementById("oraIngresso").value;
     let oraUscita = document.getElementById("oraUscita").value;
     let presenza = document.getElementById("presenza").value
-
-    // Aggiungere la registrazione della presenza allo studente per la lezione corrente
-    addAttendanceStudentToLesson(idRegister(), lessonId, studentId, oraIngresso, oraUscita,presenza);
+    
+    let registro = getRegister(idRegister());
+    let lesson_list = registro.lessonList.find(lesson => lesson.lessonId = lessonId);
+    let attendace_student = lesson_list.attendance.find(student => student.id = studentId);
+    
+    if(!attendace_student){
+        // Aggiungere la registrazione della presenza allo studente per la lezione corrente
+        addAttendanceStudentToLesson(idRegister(), lessonId, studentId, oraIngresso, oraUscita,presenza);
+    }else{
+        updateAttendances(idRegister(), lessonId, studentId, oraIngresso, oraUscita, presenza);
+    }
     closeModalConnectedStudentToRegister()
     registerTableUI();
 });
