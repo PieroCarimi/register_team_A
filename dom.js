@@ -40,10 +40,10 @@ function editNameRegister(){
     sortedRegisters.forEach(function(x) {
         listHTML += `
             <div class="d-flex">
+            <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteSingleRegister('${x.id}')"></i>
                 <li style="margin-right: 6px;">${x.id}</li>
                 <li style="margin-right: 6px; cursor: pointer;" onclick="registerView('${x.id}', '${x.name}')">${x.name}</li>
                 <i class="bi bi-pencil" style="color:blue;" onclick="idUpdateRegister('${x.id}');registerView('${registro.id}', '${registro.name}')"></i>
-                <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteSingleRegister('${x.id}')"></i>
             </div>`;
     });
     
@@ -67,10 +67,10 @@ function updateUI() {
     sortedRegisters.forEach(function (x) {
         listHTML += `
             <div class="d-flex">
+            <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteSingleRegister('${x.id}')"></i>
                 <li style="margin-right: 6px;">${x.id}</li>
                 <li style="margin-right: 6px; cursor: pointer;" onclick="registerView('${x.id}', '${x.name}')">${x.name}</li>
                 <i class="bi bi-pencil" style="color:blue;" onclick="idUpdateRegister('${x.id}');document.getElementById('formEditRegister').style.display='block';"></i>
-                <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteSingleRegister('${x.id}')"></i>
             </div>`;
     });
 
@@ -141,8 +141,8 @@ const studentUI = () => {
             <td>${student.email}</td>
             <td>${student.phoneNumber}</td>
             <td>
-                <button onclick="editStudent('${student.id}')">Edit</button>
-                <button onclick="deleteLessonStudents('${student.id}')">Delete</button>
+            <button class="btn btn-outline-primary" onclick="editStudent('${student.id}')">Edit</button>
+            <button class="btn btn-outline-danger" onclick="deleteLessonStudents('${student.id}')">Delete</button>
             </td>
         `;
         studentTableBody.appendChild(row);
@@ -226,10 +226,10 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
                 <p class="text-center" style="font-size:10px">${id}</p>
             </div>
         </div>
-        <button type="button" class="btn btn-primary" onclick="document.getElementById('connectedStudentToRegister').style.display='block'">addStudent</button>
-        <button type="button" class="btn btn-primary" onclick="document.getElementById('addLesson').style.display='block'">addLesson</button>
+        <button type="button" class="btn btn-primary" onclick="document.getElementById('connectedStudentToRegister').style.display='block'">Aggiungi studente</button>
+        <button type="button" class="btn btn-primary" onclick="document.getElementById('addLesson').style.display='block'">Aggiungi lezione</button>
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="lessonDropDown()">
-            Lesson List
+            Lista lezioni
         </button>
         <!-- Aggiunta tabella per registro -->
         <ul class="dropdown-menu" id="lessonDropDown">
@@ -347,8 +347,8 @@ function closeModalAddLesson(){
         sortedDate.forEach(function (x) {
             listHTML += `
                 <div class="d-flex">
+                <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="removeLesson('${idRegister()}', '${x.lessonId}');"></i>
                 <li style="margin-right: 6px; cursor: pointer;" onclick="lessonTable('${x.lessonId}')">${x.lessonId} ${x.lessonDate}</li>
-                    <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="removeLesson('${idRegister()}', '${x.lessonId}');"></i>
                 </div>`;
             });
     
@@ -525,13 +525,13 @@ formAttendance.addEventListener("submit", function (e) {
     }else{
         updateAttendances(idRegister(), lessonId, studentId, oraIngresso, oraUscita, presenza);
     }
-    closeModalConnectedStudentToRegister()
+    closeModalAttendanceStudentToRegister()
     registerTableUI();
 });
 
 // Questa funzione viene chiamata per chiudere il modal (o finestra modale) relativo alla registrazione degli studenti collegati.
 
-function closeModalConnectedStudentToRegister() {
+function closeModalAttendanceStudentToRegister() {
     // Nasconde l'elemento del modulo di registrazione degli studenti.
     document.getElementById('formAttendance').style.display = 'none';
 
