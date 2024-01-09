@@ -27,17 +27,17 @@
             </ul>
           </div>
         <div class="w3-container ms-auto">
-            <button class="btn btn-dark" style="margin-right: 7px" onclick="document.getElementById('id03').style.display='block';openStudentListModal()">Student List</button>
+            <button class="btn btn-dark" style="margin-right: 7px" onclick="document.getElementById('id03').style.display='block';openStudentListModal()">Lista studenti</button>
             <button class="btn btn-primary" style="margin-right: 7px;" onclick="document.getElementById('id01').style.display='block'">Crea registro</button>
             <button class="btn btn-primary" style="margin-right: 7px;" onclick="document.getElementById('id02').style.display='block'">Crea studente</button>
             <div id="id01" class="w3-modal">
-                <div class="w3-modal-content w-25 h-25 d-flex justify-content-center">
+                <div class="w3-modal-content w-25  d-flex justify-content-center">
                     <div class="w3-container">
                         <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                        <form id="formMatter">
-                       <label for="formInputMatter">Materia:</label><br>
+                       <label for="formInputMatter"><h3>Materia:</h3></label><br>
                        <input type="text" id="formInputMatter" name="formMatter" class="form-control" required><br>
-                       <input type="submit" class="btn btn-primary" value="Crea">
+                       <input type="submit" style="margin-bottom: 5px;" class="btn btn-primary" value="Crea">
                        </form>
                     </div>
                 </div>
@@ -74,10 +74,11 @@
         
     <div class="w3-container ms-auto">
         <div id="id02" class="w3-modal">
-            <div class="w3-modal-content w-25 h-50 d-flex justify-content-center">
+            <div class="w3-modal-content w-25  d-flex justify-content-center">
                 <div class="w3-container">
                     <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-display-topright">&times;</span>
                     <form id="insertStudent">
+                        <h3>Aggiungi studente:</h3>
                         <label for="studentName">Nome:</label><br>
                         <input type="text" id="studentName" name="formName" class="form-control" required><br>
     
@@ -90,7 +91,7 @@
                         <label for="studentPhone">Telefono:</label><br>
                         <input type="text" id="studentPhone" name="formPhone" class="form-control" pattern="0[0-9]*|[1-9][0-9]*">
     
-                        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Crea</button>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 10px;margin-bottom:5px ;">Crea</button>
                     </form>
                 </div>
             </div>
@@ -121,10 +122,11 @@
     </div>
     
     <div id="editStudentModal" class="w3-modal">
-        <div class="w3-modal-content w-25 h-50 d-flex justify-content-center">
+        <div class="w3-modal-content w-25 d-flex justify-content-center">
             <div class="w3-container">
                 <span onclick="closeEditStudentModal()" class="w3-button w3-display-topright">&times;</span>
                 <form id="editStudentForm">
+                    <h3>Modifica studente:</h3>
                     <label for="editStudentName">Nome:</label><br>
                     <input type="text" id="editStudentName" name="editStudentName" class="form-control" placeholder="Enter new name" required><br>
     
@@ -137,7 +139,7 @@
                     <label for="editStudentPhone">Telefono:</label><br>
                     <input type="text" id="editStudentPhone" name="formPhone" class="form-control" pattern="0[0-9]*|[1-9][0-9]*">
     
-                    <button type="button" class="btn btn-primary" style="margin-top: 10px;" onclick="saveEditedStudentModal()">Salva</button>
+                    <button type="button" class="btn btn-primary" style="margin-top: 10px; margin-bottom: 5px;" onclick="saveEditedStudentModal()">Salva</button>
                 </form>
             </div>
         </div>
@@ -147,11 +149,12 @@
         <div class="w3-modal-content w-25 h-50 d-flex justify-content-center">
           <div class="w3-container">
             <span onclick="document.getElementById('connectedStudentToRegister').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-                <h2>Inserisci l'ID dello studente</h2>
+                <h3>Inserisci l'ID dello studente</h3>
                <form id="studentForm">
                     <label for="idStudent">ID Studente:</label>
                     <input type="text" id="idStudent" name="idStudent" required>
-                    <button type="button" onclick="connectStudentToSingleRegister(idStudent.value,idRegister()); closeModalConnectedStudentToRegister()">Invia</button>
+                    <br>
+                    <button type="button" class="btn btn-primary" style="margin-top: 5px;" onclick="connectStudentToSingleRegister(idStudent.value,idRegister()); closeModalConnectedStudentToRegister()">Invia</button>
             </form>
         </div>
         </div>
@@ -165,7 +168,7 @@
                 <form>
                     <div class="row mb-3">
                         <div class="col-12">
-                            <label for="calendarioInput" class="form-label"><h2>Select a date:</h2></label>
+                            <label for="calendarioInput" class="form-label"><h3>Inserisci la data:</h3></label>
                             <input type="date" class="form-control" id="calendarioInput" name="calendarioInput" required>
                         </div>
                     </div>
@@ -184,13 +187,14 @@
           <div class="w3-container">
             <span onclick="document.getElementById('formAttendance').style.display='none'" class="w3-button w3-display-topright">&times;</span>
             <form>
+                <h3>Aggiungi presenza</h3>
                 <div class="form-group">
                     <label for="oraIngresso">Ora di Ingresso</label>
-                    <input type="time" class="form-control" id="oraIngresso" required>
+                    <input type="time" class="form-control" id="oraIngresso" >
                 </div>
                 <div class="form-group">
                     <label for="oraUscita">Ora di Uscita</label>
-                    <input type="time" class="form-control" id="oraUscita" required>
+                    <input type="time" class="form-control" id="oraUscita">
                 </div>
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="presenza">
@@ -204,7 +208,7 @@
     </div>
 
     <div id="formGrade" class="w3-modal">
-        <div class="w3-modal-content w-25 h-25 d-flex justify-content-center">
+        <div class="w3-modal-content w-25 h-50 d-flex justify-content-center">
           <div class="w3-container">
             <span onclick="document.getElementById('formGrade').style.display='none'" class="w3-button w3-display-topright">&times;</span>
             
@@ -212,7 +216,7 @@
             
             <form>
                 
-                <div class="form-group" style="margin-bottom: 10px;">
+                <div class="form-group" style="margin-bottom: 5px;">
                     <label for="voto">Voto:</label>
                     <input type="number" class="form-control" id="voto" name="voto" min="1" max="10" required>
                 </div>
