@@ -1,5 +1,16 @@
-let formMatter = document.getElementById("formMatter")
-formMatter.addEventListener("submit", function(e) {
+let id = "";  // id dinamico per l'update del registro
+let currentEditingStudent = null;
+let lessonId = "";  // id dinamico per le lezioni
+let idregistro = "";
+let isLessonManuallyOpened = false;
+let studentId = "";
+
+let formMatter = document.getElementById("formMatter");
+let formStudent = document.getElementById("insertStudent");
+const formAttendance = document.getElementById("formAttendance");
+let formGrade = document.getElementById("formGrade");
+
+formMatter.addEventListener("submit", function (e) {
     e.preventDefault();
     let formInputMatter = document.getElementById("formInputMatter")
     createRegister(formInputMatter.value)
@@ -8,18 +19,18 @@ formMatter.addEventListener("submit", function(e) {
     console.log(registers)
 });
 
-function closeModalCreateRegister(){
+function closeModalCreateRegister() {
     document.getElementById('id01').style.display = 'none';
     let formInputMatter = document.getElementById("formInputMatter");
     formInputMatter.value = "";
 }
+
 // La funzione 'idUpdateRegister' prende un indice 'idx' come argomento e assegna il suo valore alla variabile globale 'id'.
-let id = ""
 function idUpdateRegister(idx) {
-   id = idx
+    id = idx
 }
 
-function editNameRegister(){
+function editNameRegister() {
     let editRegister = document.getElementById("editRegister").value
     console.log(editRegister)
 
@@ -29,15 +40,15 @@ function editNameRegister(){
         alert("Il nome del registro non può essere vuoto");
         return; // Esce dalla funzione senza inviare il form
     }
-    
+
     updateRegister(id, editRegister);
 
     const sortedRegisters = [...registers];
     sortedRegisters.sort((a, b) => a.name.localeCompare(b.name));
-    
+
     // Aggiorna l'HTML della lista
     let listHTML = "";
-    sortedRegisters.forEach(function(x) {
+    sortedRegisters.forEach(function (x) {
         listHTML += `
             <div class="d-flex">
             <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="deleteSingleRegister('${x.id}')"></i>
@@ -46,7 +57,7 @@ function editNameRegister(){
                 <i class="bi bi-pencil" style="color:blue;" onclick="idUpdateRegister('${x.id}');registerView('${registro.id}', '${registro.name}')"></i>
             </div>`;
     });
-    
+
     // Aggiorna l'interfaccia utente 
     updateUI();
     document.getElementById("formEditRegister").style.display = "none" //impostare il modale dell'update del registro a display none
@@ -54,8 +65,8 @@ function editNameRegister(){
 
 function getCurrentlyViewedRegister() {
     // Restituisci il registro attualmente visualizzato
-       return registers.find(x => x.id === id);
-   }
+    return registers.find(x => x.id === id);
+}
 
 function updateUI() {
     let listHTML = "";
@@ -82,7 +93,7 @@ function updateUI() {
     }
 }
 
-function deleteSingleRegister(register_id){
+function deleteSingleRegister(register_id) {
     deleteRegister(register_id);
     // Rimuovi l'HTML associato dalla pagina
     const materia = document.getElementById("registromateria");
@@ -92,22 +103,22 @@ function deleteSingleRegister(register_id){
     updateUI();
 }
 
-let formStudent = document.getElementById("insertStudent")
-formStudent.addEventListener("submit", function(e) {
+
+formStudent.addEventListener("submit", function (e) {
     e.preventDefault();
     let formNameStudent = document.getElementById("studentName");
     let formLastNameStudent = document.getElementById("studentLastname");
     let formEmailStudent = document.getElementById("studenteEmail");
     let formPhoneStudent = document.getElementById("studentPhone");
-    console.log(formNameStudent.value, formLastNameStudent.value, formEmailStudent.value,formPhoneStudent.value);
-    createStudent(formNameStudent.value, formLastNameStudent.value, formEmailStudent.value,formPhoneStudent.value);
-    console.log(formNameStudent.value, formLastNameStudent.value, formEmailStudent.value,formPhoneStudent.value);
+    console.log(formNameStudent.value, formLastNameStudent.value, formEmailStudent.value, formPhoneStudent.value);
+    createStudent(formNameStudent.value, formLastNameStudent.value, formEmailStudent.value, formPhoneStudent.value);
+    console.log(formNameStudent.value, formLastNameStudent.value, formEmailStudent.value, formPhoneStudent.value);
     closeModalCreateStudent();
     console.log(isLessonManuallyOpened)
 });
 
 
-function closeModalCreateStudent(){
+function closeModalCreateStudent() {
     document.getElementById('id02').style.display = 'none';
     let formNameStudent = document.getElementById("studentName");
     let formLastNameStudent = document.getElementById("studentLastname");
@@ -121,12 +132,12 @@ function closeModalCreateStudent(){
 }
 
 
-const getSortedStudentList = () => {
+function getSortedStudentList() {
     return students.slice().sort((a, b) => a.lastName.localeCompare(b.lastName));
 };
 
 // Funzione per popolare il corpo della tabella degli studenti nel modal
-const studentUI = () => {
+function studentUI() {
     const studentTableBody = document.getElementById('studentTableBody');
     studentTableBody.innerHTML = ''; // Pulisce il corpo della tabella prima di popolarlo
 
@@ -149,7 +160,6 @@ const studentUI = () => {
     });
 };
 
-let currentEditingStudent = null;
 
 function editStudent(id) {
     currentEditingStudent = students.find(s => s.id === id);
@@ -195,7 +205,7 @@ function saveEditedStudentModal() {
         // Aggiorna la tabella degli studenti nella pagina principale
         studentUI();
         const tableId = document.getElementById("tableRegisterLessonDisplay");
-        if(tableId){
+        if (tableId) {
             registerTableUI();
         }
     } else {
@@ -205,16 +215,16 @@ function saveEditedStudentModal() {
 
 
 // Funzione per aprire il modal degli studenti e popolare la tabella
-const openStudentListModal = () => {
+function openStudentListModal() {
     document.getElementById('id03').style.display = 'block';
     studentUI();
 };
 
-let idregistro = ""
+
 function registerView(id, name) { // Definizione della funzione "registerView" che accetta due parametri: "id" e "name"
     idregistro = id
     console.log(id + name);
-     // Ottieni l'elemento HTML con l'id "registromateria"
+    // Ottieni l'elemento HTML con l'id "registromateria"
     let materia = document.getElementById("registromateria");
     // Inizializza una stringa HTML per la visualizzazione della materia
     let listHTML = "";
@@ -265,98 +275,105 @@ function registerView(id, name) { // Definizione della funzione "registerView" c
               <span id="testoArgomento"></span>
             </div>
            </div>`
-        // Aggiorna il contenuto dell'elemento "registromateria" con la stringa HTML
-        materia.innerHTML = listHTML;
-        console.log(registers)
+    // Aggiorna il contenuto dell'elemento "registromateria" con la stringa HTML
+    materia.innerHTML = listHTML;
+    console.log(registers)
 
 }
-      // Definizione della funzione "idRegister" che restituisce il valore corrente di "idregistro"
-      function idRegister (){return idregistro}
 
-      function connectStudentToSingleRegister(studentId, registerId) {
-        connectStudentToRegister(studentId, registerId);
-    
-        // Controlla se è aperta una lezione per quella materia e se è stata aperta manualmente
-        if (lessonId !== null && lessonId !== "" && isLessonManuallyOpened) {
-            let registro = registers.find(x => x.id === idRegister());
-            let lessonRegister = registro.lessonList.find(lesson => lesson.lessonId === lessonId);
-    
-            // Verifica se l'oggetto lezione e la proprietà attendance sono definiti
-            if (lessonRegister && lessonRegister.attendance) {
-                registerTableUI();
-                isLessonManuallyOpened = true;
-            } else {
-                console.error("L'oggetto lezione o la proprietà attendance non sono definiti.");
-               isLessonManuallyOpened = false; // Resetta la variabile dopo aver visualizzato la lezione
-            }
-            
-            
+// Definizione della funzione "idRegister" che restituisce il valore corrente di "idregistro"
+function idRegister() { return idregistro }
+
+function connectStudentToSingleRegister(studentId, registerId) {
+    connectStudentToRegister(studentId, registerId);
+
+    // Controlla se è aperta una lezione per quella materia e se è stata aperta manualmente
+    if (lessonId !== null && lessonId !== "" && isLessonManuallyOpened) {
+        let registro = registers.find(x => x.id === idRegister());
+        let lessonRegister = registro.lessonList.find(lesson => lesson.lessonId === lessonId);
+
+        // Verifica se l'oggetto lezione e la proprietà attendance sono definiti
+        if (lessonRegister && lessonRegister.attendance) {
+            registerTableUI();
+            isLessonManuallyOpened = true;
+        } else {
+            console.error("L'oggetto lezione o la proprietà attendance non sono definiti.");
+            isLessonManuallyOpened = false; // Resetta la variabile dopo aver visualizzato la lezione
         }
-    }
 
-function closeModalConnectedStudentToRegister(){
+
+    }
+}
+
+function closeModalConnectedStudentToRegister() {
     document.getElementById('connectedStudentToRegister').style.display = 'none';
     const idStudent = document.getElementById("idStudent");
     idStudent.value = "";
 }
 
-function closeModalAddLesson(){
+function closeModalAddLesson() {
     document.getElementById("addLesson").style.display = "none";
     const calendarioInput = document.getElementById("calendarioInput");
-    calendarioInput.value = ""; 
+    calendarioInput.value = "";
 }
-    
-      function ottieniData() {
-        const calendarioInput = document.getElementById('calendarioInput');
-        const dataSelezionata = calendarioInput.value;
-    
+
+function ottieniData() {
+    const calendarioInput = document.getElementById('calendarioInput');
+    const dataSelezionata = calendarioInput.value;
+
+    // Verifica se il campo della data è vuoto
+    if (dataSelezionata.trim() === '') {
+        console.log("Il campo della data è vuoto. Inserisci una data valida.");
+    } else {
+
         // Converti la data da formato stringa a oggetto Date
         const data = new Date(dataSelezionata);
-    
+
         // Estrai giorno, mese e anno dalla data
         const giorno = data.getDate().toString().padStart(2, '0');
         const mese = (data.getMonth() + 1).toString().padStart(2, '0'); // Mese è zero-based, quindi aggiungi 1
         const anno = data.getFullYear();
-    
+
         // Formatta la data nel formato desiderato (giorno-mese-anno)
         const dataFormattata = `${giorno}-${mese}-${anno}`;
-    
+
         console.log(idRegister());
         const searchRegister = registers.find(x => x.id === idregistro);
         addLesson(idRegister(), dataFormattata);
-    
+
         console.log(registers);
         console.log(`Data selezionata: ${dataFormattata}`);
         return dataFormattata;
     }
-    
+}
 
-      let lessonId = ""  // id dinamico per le lezioni
-      function lessonDropDown() {  //Ordinare per più recenti le date delle lezioni
-        const searchRegister = registers.find(x => x.id === idRegister());
-        const copySearchRegister = [...searchRegister.lessonList];
-        let lessonDropDown = document.getElementById("lessonDropDown");
-        let listHTML = "";
-    
-        // Ordina l'array in base alla data
-        const sortedDate = copySearchRegister.sort(function (a, b) {
-            return new Date(a.lessonDate) - new Date(b.lessonDate);
-        });
-    
-        // Creazione dell'HTML usando il risultato ordinato
-        sortedDate.forEach(function (x) {
-            listHTML += `
+
+
+function lessonDropDown() {  //Ordinare per più recenti le date delle lezioni
+    const searchRegister = registers.find(x => x.id === idRegister());
+    const copySearchRegister = [...searchRegister.lessonList];
+    let lessonDropDown = document.getElementById("lessonDropDown");
+    let listHTML = "";
+
+    // Ordina l'array in base alla data
+    const sortedDate = copySearchRegister.sort(function (a, b) {
+        return new Date(a.lessonDate) - new Date(b.lessonDate);
+    });
+
+    // Creazione dell'HTML usando il risultato ordinato
+    sortedDate.forEach(function (x) {
+        listHTML += `
                 <div class="d-flex">
                 <i class="bi bi-x" style="font-size: 19.3px; color:red; cursor: pointer;" onclick="removeLesson('${idRegister()}', '${x.lessonId}');"></i>
                 <li style="margin-right: 6px; cursor: pointer;" onclick="lessonTable('${x.lessonId}')">${x.lessonId} ${x.lessonDate}</li>
                 </div>`;
-            });
-    
-        lessonDropDown.innerHTML = listHTML;
-        console.log(registers)
-    }
+    });
 
-function registerTableUI(){
+    lessonDropDown.innerHTML = listHTML;
+    console.log(registers)
+}
+
+function registerTableUI() {
     // Stringa HTML che conterrà la tabella delle lezioni
     let listHTML = "";
 
@@ -367,82 +384,82 @@ function registerTableUI(){
     let registro = registers.find(x => x.id === idRegister());
 
     // Ottenere la lista degli studenti ordinata per cognome
-    const orderStudents = registro.students.slice().sort((a, b) => a.lastName.localeCompare(b.lastName));
+    let orderStudents = [];
+    if (!!registro && !!registro.students) {
+        orderStudents = registro.students.slice().sort((a, b) => a.lastName.localeCompare(b.lastName));
+    }
 
     // Ottenere il riferimento all'elemento di visualizzazione della tabella delle lezioni
     let tableDisplay = document.getElementById("tableRegisterLessonDisplay");
-    tableDisplay.style.display = "block";
+    if (tableDisplay) {
+        tableDisplay.style.display = "block";
+    }
     let cardArgomento = document.getElementById("cardArgomento");
-    if(registro.students.length>0){
-        cardArgomento.style.display = "block";
+    if (!!registro && registro.students && registro.students.length > 0) {
+        if (cardArgomento) {
+            cardArgomento.style.display = "block";
+        }
     }
-    else{
-        cardArgomento.style.display = "none";
+    else {
+        if (cardArgomento) {
+            cardArgomento.style.display = "none";
+        }
     }
-    
-   
 
     // Trovare l'oggetto lezione corrispondente all'ID della lezione corrente
-    let lessonRegister = registro.lessonList.find(lesson => lesson.lessonId === lessonId);
+    let lessonRegister;
+    if (!!registro && !!registro.lessonList) {
+        lessonRegister = registro.lessonList.find(lesson => lesson.lessonId === lessonId);
+    }
     console.log(lessonRegister);
+    if (!!lessonRegister) {
+        // Iterare sugli studenti ordinati per creare righe della tabella
+        orderStudents.forEach(function (x) {
+            // Trovare la presenza dello studente nella lezione corrente
+            let AttendanceStudent = lessonRegister.attendance.find(x => x.studentId === studentId);
+            console.log(AttendanceStudent)
 
-    // Iterare sugli studenti ordinati per creare righe della tabella
-    orderStudents.forEach(function (x) {
-        // Trovare la presenza dello studente nella lezione corrente
-        let AttendanceStudent = lessonRegister.attendance.find(x => x.studentId === studentId);
-        console.log(AttendanceStudent)
-        // Variabili per l'orario di entrata, uscita e presenza dello studente
-        let orarioEntrata, orarioUscita;
+            let registerLessonDate = registro.lessonList.find(x => x.lessonId === lessonId)
+            console.log(registerLessonDate)
+            console.log(studentId)
 
-        let registerLessonDate = registro.lessonList.find(x => x.lessonId === lessonId)
-        console.log(registerLessonDate)
-        console.log(studentId)
+            let currentDate = document.getElementById("currentDate");
+            currentDate.innerHTML = registerLessonDate.lessonDate;
 
-        let currentDate = document.getElementById("currentDate");
-        currentDate.innerHTML = registerLessonDate.lessonDate;
+            let gradeStudent = registro.gradeList.find(grade => grade.idStudent === studentId && grade.gradeDate === registerLessonDate.lessonDate);
+            let insertGrade;
+            if (gradeStudent) {
+                insertGrade = gradeStudent.gradeValue;
+            } else {
+                insertGrade = "";
+            }
 
-        let gradeStudent = registro.gradeList.find(grade => grade.idStudent === studentId && grade.gradeDate === registerLessonDate.lessonDate);
-        let insertGrade;
-        if(gradeStudent){
-            insertGrade = gradeStudent.gradeValue;
-        }else{
-            insertGrade = "";
-        }
 
-        // Verificare se è presente una registrazione di presenza per lo studente
-        
-            // Ottenere l'orario di entrata, uscita e presenza dalla registrazione di presenza
-           /* orarioEntrata = getAttendances(idRegister(), lessonId, studentId).entryTime;
-            console.log(orarioEntrata);
-            orarioUscita = getAttendances(idRegister(), lessonId, studentId).exitTime;*/
             // Ottenere l'array di presenze e assenze per la lezione corrente
-  let attendanceObject = getAttendances(idRegister(), lessonId,x.id);
-
-    // Trova l'oggetto corrispondente nell'array di presenze e assenze
-
-        
-
-    // Aggiorna gli elementi HTML con i nuovi dati
-    
-       let orarioEntrataElement  = attendanceObject ? attendanceObject.entryTime : '';
-       console.log(orarioEntrataElement)
-       
-       let orarioUscitaElement  = attendanceObject ? attendanceObject.exitTime : '';
-       
-      let presenzaElement = attendanceObject ? (attendanceObject.presence? "Presente": "")  : '';
-    
-
-    console.log(registers);
-
-    let testoArgomento = document.getElementById("testoArgomento")
-    console.log(registerLessonDate.arguments)
-    console.log(testoArgomento)
-    testoArgomento.innerHTML = registerLessonDate.arguments
+            let attendanceObject = getAttendances(idRegister(), lessonId, x.id);
 
 
-        
-        // Costruire la stringa HTML per la riga della tabella
-        listHTML += `<div class="container">
+            // Aggiorna gli elementi HTML con i nuovi dati
+
+            let orarioEntrataElement = attendanceObject ? attendanceObject.entryTime : '';
+            console.log(orarioEntrataElement)
+
+            let orarioUscitaElement = attendanceObject ? attendanceObject.exitTime : '';
+
+            let presenzaElement = attendanceObject ? (attendanceObject.presence ? "Presente" : "") : '';
+
+
+            console.log(registers);
+
+            let testoArgomento = document.getElementById("testoArgomento")
+            console.log(registerLessonDate.arguments)
+            console.log(testoArgomento)
+            testoArgomento.innerHTML = registerLessonDate.arguments
+
+
+
+            // Costruire la stringa HTML per la riga della tabella
+            listHTML += `<div class="container">
             <tr>
                 <td class="text-center align-middle">
                     <div style="display: flex; align-items: center;">
@@ -467,15 +484,16 @@ function registerTableUI(){
         </table>
     </div>
     `;
-    });
+        });
 
-    // Inserire la stringa HTML nella tabella delle lezioni
-    tableRegisterLesson.innerHTML = listHTML;
-    
+        // Inserire la stringa HTML nella tabella delle lezioni
+        tableRegisterLesson.innerHTML = listHTML;
+    }
+
 }
 
-let isLessonManuallyOpened = false;
-       // Funzione per creare la tabella delle lezioni per ogni registro
+
+// Funzione per creare la tabella delle lezioni per ogni registro
 function lessonTable(x) {
     // Impostare l'ID della lezione corrente
     lessonId = x;
@@ -485,28 +503,25 @@ function lessonTable(x) {
 }
 
 
-function deleteStudentFromRegister(register_id, student_id){
+function deleteStudentFromRegister(register_id, student_id) {
     removeStudent(register_id, student_id);
     registerTableUI();
 }
 
 
-function deleteLessonStudents(idStudent){
+function deleteLessonStudents(idStudent) {
     deleteStudent(idStudent)
-    removeStudent(idRegister(),idStudent)
+    removeStudent(idRegister(), idStudent)
     studentUI();
     registerTableUI();
 }
 
-    let studentId = ""
-function addAttendance(studentIdx){
+
+function addAttendance(studentIdx) {
     studentId = studentIdx
     return studentId
 }
 
-
-
-const formAttendance = document.getElementById("formAttendance");
 
 formAttendance.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -514,15 +529,15 @@ formAttendance.addEventListener("submit", function (e) {
     let oraIngresso = document.getElementById("oraIngresso").value;
     let oraUscita = document.getElementById("oraUscita").value;
     let presenza = document.getElementById("presenza").value
-    
+
     let registro = getRegister(idRegister());
     let lesson_list = registro.lessonList.find(lesson => lesson.lessonId = lessonId);
     let attendace_student = lesson_list.attendance.find(student => student.id = studentId);
-    
-    if(!attendace_student){
+
+    if (!attendace_student) {
         // Aggiungere la registrazione della presenza allo studente per la lezione corrente
-        addAttendanceStudentToLesson(idRegister(), lessonId, studentId, oraIngresso, oraUscita,presenza);
-    }else{
+        addAttendanceStudentToLesson(idRegister(), lessonId, studentId, oraIngresso, oraUscita, presenza);
+    } else {
         updateAttendances(idRegister(), lessonId, studentId, oraIngresso, oraUscita, presenza);
     }
     closeModalAttendanceStudentToRegister()
@@ -547,26 +562,23 @@ function closeModalAttendanceStudentToRegister() {
 
 
 
-function deleteAttendancesView(registerId, lessonId, studentId){
+function deleteAttendancesView(registerId, lessonId, studentId) {
     deleteAttendances(registerId, lessonId, studentId)
     const gradeStudentList = registers.find(x => x.id === idRegister()).gradeList;
     const oggettiFiltrati = gradeStudentList.filter((oggetto) => oggetto.idStudent === studentId);
     let registro = registers.find(x => x.id === idRegister());
-    let lessonIdDate =  registro.lessonList.find(x => x.lessonId === lessonId).lessonDate
+    let lessonIdDate = registro.lessonList.find(x => x.lessonId === lessonId).lessonDate
     oggettiFiltrati.forEach(student => {
         // Verifica se la data della valutazione coincide con la data della lezione.
-          if(student.gradeDate === lessonIdDate ){
+        if (student.gradeDate === lessonIdDate) {
             // Se la condizione è verificata, chiama la funzione `removeGrade` per eliminare la valutazione dello studente.
-              removeGrade(registerId,student.gradeId)
-          }
+            removeGrade(registerId, student.gradeId)
+        }
     })
     // Aggiorna l'interfaccia utente del registro chiamando la funzione `registerTableUI`.
     registerTableUI();
 }
 
-
-
-let formGrade = document.getElementById("formGrade");
 
 // Aggiungere un gestore di eventi per l'invio del modulo di registrazione presenze
 const formGrades = formGrade.addEventListener("submit", function (e) {
@@ -587,25 +599,20 @@ const formGrades = formGrade.addEventListener("submit", function (e) {
     // Ottenere i riferimenti agli elementi HTML per visualizzare i dati aggiornati
     let gradeElement = document.getElementById(`grade_${studentId}`);
 
-    // Aggiornare gli elementi HTML con i nuovi dati
-    //if (gradeElement) {
-     //   gradeElement.innerHTML = grade;
-    //}
-
     // Stampare l'oggetto "registers" nella console dopo l'aggiornamento
     console.log(registers);
     closeModalFormGrade();
 });
 
-function closeModalFormGrade(){
+function closeModalFormGrade() {
     document.getElementById('formGrade').style.display = 'none';
     let voto = document.getElementById("voto");
     voto.value = "";
 }
 
-const studentGrade = (studentId) => {
+function studentGrade(studentId) {
     const studentTableBody = document.getElementById('studentTableBodyGrade');
-    
+
     studentTableBody.innerHTML = ''; // Pulisce il corpo della tabella prima di popolarlo
 
     // const sortedStudents = getSortedStudentList();
@@ -613,9 +620,6 @@ const studentGrade = (studentId) => {
     const oggettiFiltrati = gradeStudentList.filter((oggetto) => oggetto.idStudent === studentId);
 
     let registro = registers.find(x => x.id === idRegister());
-
-    // Trova l'oggetto lezione corrispondente all'ID della lezione corrente
-    //let lessonRegister = registro.lessonList.find(lesson => lesson.lessonId === lessonId);
 
     // Trova l'oggetto studente corrispondente all'ID dello studente corrente
     let student = registro.students.find(student => student.id === studentId);
@@ -634,7 +638,7 @@ const studentGrade = (studentId) => {
     oggettiFiltrati.sort((a, b) => new Date(a.gradeDate) - new Date(b.gradeDate));
 
     console.log(oggettiFiltrati);
-    
+
     oggettiFiltrati.forEach(student => {
         const row = document.createElement('tr');
         row.id = `gradeRow_${student.gradeId}`; // Aggiungi un ID unico basato sull'ID del voto
@@ -659,8 +663,8 @@ function removeSingleGrade(register_id, grade_id) {
     }
 }
 
-function ottieniArgomento(){
-    
+function ottieniArgomento() {
+
     let valueArgomento = document.getElementById("valueArgomento").value
     let registro = registers.find(x => x.id === idRegister());
     let lesson = registro.lessonList.find(x => x.lessonId === lessonId)
@@ -675,24 +679,21 @@ function closeModalArguments() {
 }
 
 
-function argumentValue(){
+function argumentValue() {
     let registro = registers.find(x => x.id === idRegister());
     let lesson = registro.lessonList.find(x => x.lessonId === lessonId);
     let valueArgomento = document.getElementById("valueArgomento");
 
-    // Pulisci completamente il campo del form
-    
-
     // Imposta il valore del campo con l'argomento corrente, se presente
     if (lesson.arguments !== "") {
         valueArgomento.value = lesson.arguments;
-    }else{
+    } else {
         valueArgomento.value = "";
     }
 }
 
 
-function deleteArguments(){
+function deleteArguments() {
     let registro = registers.find(x => x.id === idRegister());
     let lesson = registro.lessonList.find(x => x.lessonId === lessonId)
     lesson.arguments = ""
