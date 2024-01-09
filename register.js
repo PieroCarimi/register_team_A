@@ -1,4 +1,3 @@
-
 const registers = [];
 
 function createRegister(registerName) {
@@ -12,13 +11,12 @@ function createRegister(registerName) {
     registers.push(newRegister);
     return newRegister;
 }
- 
+
 function updateRegister(registerId, newName) {
     const registerToUpdate = registers.find(register => register.id === registerId);
 
-    if (registerToUpdate) {
+    if (!!registerToUpdate) {
         registerToUpdate.name = newName;
-        //updateUI();
         console.log(registers)
         return registerToUpdate;
     } else {
@@ -41,7 +39,7 @@ function deleteRegister(registerId) {
 function getRegister(registerId) {
     const register = registers.find(register => register.id === registerId);
 
-    if (register) {
+    if (!!register) {
         return register;
     } else {
         console.error("Register not found");
@@ -54,7 +52,7 @@ function connectStudentToRegister(studentId, registerId) {
 
     const register = registers.find(x => x.id === registerId)
 
-     if (student && register) {
+    if (!!student && !!register) {
         // Controlla se lo studente non è già registrato
         if (!register.students.includes(student)) {
             register.students.push(student);
@@ -72,13 +70,13 @@ function connectStudentToRegister(studentId, registerId) {
 function addStudent(registerId, studentId) {
     const register = registers.find(register => register.id === registerId);
 
-    if (register) {
+    if (!!register) {
         const studentRegister = students.findIndex(student => student.id === studentId);
-        if(studentRegister !== -1){
+        if (studentRegister !== -1) {
             const studentObj = students.find(student => student.id === studentId);
             register.students.push(studentObj);
             console.log("Student added successfully to register:", register.name);
-            }
+        }
     } else {
         console.error("Register not found");
     }
@@ -87,7 +85,7 @@ function addStudent(registerId, studentId) {
 function removeStudent(registerId, studentId) {
     const register = registers.find(register => register.id === registerId);
 
-    if (register) {
+    if (!!register) {
         const studentIndex = register.students.findIndex(student => student.id === studentId);
 
         if (studentIndex !== -1) {
@@ -117,20 +115,20 @@ function removeStudent(registerId, studentId) {
 function addLesson(registerId, lessonDate) {
     const register = registers.find(register => register.id === registerId);
 
-    if (register) {
+    if (!!register) {
         const searchLesson = register.lessonList.findIndex(data => data.lessonDate === lessonDate)
-        if(searchLesson === -1){
-        const lesson = {
-            lessonId: generateUniqueId(),
-            lessonDate: lessonDate,
-            attendance: [],
-            arguments:""
-        };
-        register.lessonList.push(lesson);
-        console.log("Lesson added successfully to register:", register.name);
-    }else{
-        console.log("A lesson already exists for this register on this date")
-    }
+        if (searchLesson === -1) {
+            const lesson = {
+                lessonId: generateUniqueId(),
+                lessonDate: lessonDate,
+                attendance: [],
+                arguments: ""
+            };
+            register.lessonList.push(lesson);
+            console.log("Lesson added successfully to register:", register.name);
+        } else {
+            console.log("A lesson already exists for this register on this date")
+        }
     } else {
         console.error("Register not found");
     }
@@ -141,13 +139,13 @@ function removeLesson(registerId, lessonId) {
     console.log(lessonId)
     const register = registers.find(register => register.id === registerId);
 
-    if (register) {
+    if (!!register) {
         const lessonIndex = register.lessonList.findIndex(lesson => lesson.lessonId === lessonId);
 
         if (lessonIndex !== -1) {
             // Rimuovi la lezione dalla lista delle lezioni
             register.lessonList.splice(lessonIndex, 1);
-            
+
             console.log("Lesson removed successfully from register:", register.name);
         } else {
             console.error("Lesson not found");
@@ -160,7 +158,7 @@ function removeLesson(registerId, lessonId) {
 function addGrade(registerId, idStudent, gradeDate, gradeValue) {
     const register = registers.find(register => register.id === registerId);
 
-    if (register) {
+    if (!!register) {
         // Trova l'indice della lezione corrispondente alla data della valutazione
         const lessonIndex = register.lessonList.findIndex(lesson => lesson.lessonDate === gradeDate);
 
@@ -192,7 +190,7 @@ function addGrade(registerId, idStudent, gradeDate, gradeValue) {
 function removeGrade(registerId, gradeId) {
     const register = registers.find(register => register.id === registerId);
 
-    if (register) {
+    if (!!register) {
         const gradeIndex = register.gradeList.findIndex(grade => grade.gradeId === gradeId);
 
         if (gradeIndex !== -1) {
@@ -210,15 +208,15 @@ function removeGrade(registerId, gradeId) {
 function addAttendanceStudentToLesson(registerId, lessonId, studentId, entryTime, exitTime, presence) {
     const register = registers.find(register => register.id === registerId);
 
-    if (register) {
+    if (!!register) {
         const lessonIndex = register.lessonList.findIndex(lesson => lesson.lessonId === lessonId);
 
         if (lessonIndex !== -1) {
-            // Check if the student is already in the attendance list for this lesson
+            // Verifica se lo studente è già presente nell'elenco presenze per questa lezione
             const studentAttendanceIndex = register.lessonList[lessonIndex].attendance.findIndex(att => att.studentId === studentId);
 
             if (studentAttendanceIndex === -1) {
-                // If the student is not in the attendance list, add the new attendance record
+                // Se lo studente non è presente nell'elenco presenze, aggiungi il nuovo record di presenza
                 register.lessonList[lessonIndex].attendance.push({
                     studentId: studentId,
                     entryTime: entryTime,
@@ -240,7 +238,7 @@ function addAttendanceStudentToLesson(registerId, lessonId, studentId, entryTime
 function getAttendances(registerId, lessonId, studentId) {
     const register = registers.find(register => register.id === registerId);
 
-    if (register) {
+    if (!!register) {
         const lessonIndex = register.lessonList.findIndex(lesson => lesson.lessonId === lessonId);
 
         if (lessonIndex !== -1) {
@@ -279,7 +277,7 @@ function getAttendances(registerId, lessonId, studentId) {
 function updateAttendances(registerId, lessonId, studentId, entryTime, exitTime, presence) {
     const register = registers.find(register => register.id === registerId);
 
-    if (register) {
+    if (!!register) {
         const lessonIndex = register.lessonList.findIndex(lesson => lesson.lessonId === lessonId);
 
         if (lessonIndex !== -1) {
@@ -307,7 +305,7 @@ function updateAttendances(registerId, lessonId, studentId, entryTime, exitTime,
 function deleteAttendances(registerId, lessonId, studentId) {
     const register = registers.find(register => register.id === registerId);
 
-    if (register) {
+    if (!!register) {
         const lessonIndex = register.lessonList.findIndex(lesson => lesson.lessonId === lessonId);
 
         if (lessonIndex !== -1) {
@@ -327,5 +325,3 @@ function deleteAttendances(registerId, lessonId, studentId) {
         console.error("Register not found");
     }
 }
-
-
