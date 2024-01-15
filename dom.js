@@ -10,6 +10,10 @@ let formStudent = document.getElementById("insertStudent");
 const formAttendance = document.getElementById("formAttendance");
 let formGrade = document.getElementById("formGrade");
 
+document.addEventListener('DOMContentLoaded', (event) => {
+    updateUI();
+})
+
 formMatter.addEventListener("submit", function (e) {
     e.preventDefault();
     let formInputMatter = document.getElementById("formInputMatter")
