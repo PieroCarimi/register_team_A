@@ -1,4 +1,8 @@
-const registers = [];
+const registers = JSON.parse(localStorage.getItem('registers')) || [];
+
+function saveRegisters() {
+    localStorage.setItem('registers', JSON.stringify(registers));
+}
 
 function createRegister(registerName) {
     const newRegister = {
@@ -9,6 +13,7 @@ function createRegister(registerName) {
         students: []
     };
     registers.push(newRegister);
+    saveRegisters();
     return newRegister;
 }
 
@@ -17,7 +22,8 @@ function updateRegister(registerId, newName) {
 
     if (!!registerToUpdate) {
         registerToUpdate.name = newName;
-        console.log(registers)
+        console.log(registers);
+        saveRegisters();
         return registerToUpdate;
     } else {
         console.error("Register not found");
@@ -31,6 +37,7 @@ function deleteRegister(registerId) {
     if (registerIndex !== -1) {
         registers.splice(registerIndex, 1);
         console.log("Register deleted successfully");
+        saveRegisters();
     } else {
         console.error("Register not found");
     }
@@ -61,6 +68,7 @@ function connectStudentToRegister(studentId, registerId) {
         }
     }
     console.log(student)
+    saveRegisters();
 
 }
 
@@ -80,6 +88,7 @@ function addStudent(registerId, studentId) {
     } else {
         console.error("Register not found");
     }
+    saveRegisters();
 }
 
 function removeStudent(registerId, studentId) {
@@ -110,6 +119,7 @@ function removeStudent(registerId, studentId) {
     } else {
         console.error("Register not found");
     }
+    saveRegisters();
 }
 
 function addLesson(registerId, lessonDate) {
@@ -132,6 +142,7 @@ function addLesson(registerId, lessonDate) {
     } else {
         console.error("Register not found");
     }
+    saveRegisters();
 }
 
 function removeLesson(registerId, lessonId) {
@@ -153,6 +164,7 @@ function removeLesson(registerId, lessonId) {
     } else {
         console.error("Register not found");
     }
+    saveRegisters();
 }
 
 function addGrade(registerId, idStudent, gradeDate, gradeValue) {
@@ -185,6 +197,7 @@ function addGrade(registerId, idStudent, gradeDate, gradeValue) {
     } else {
         console.error("Register not found");
     }
+    saveRegisters();
 }
 
 function removeGrade(registerId, gradeId) {
@@ -203,6 +216,7 @@ function removeGrade(registerId, gradeId) {
     } else {
         console.error("Register not found");
     }
+    saveRegisters();
 }
 
 function addAttendanceStudentToLesson(registerId, lessonId, studentId, entryTime, exitTime, presence) {
@@ -233,6 +247,7 @@ function addAttendanceStudentToLesson(registerId, lessonId, studentId, entryTime
     } else {
         console.error("Register not found");
     }
+    saveRegisters();
 }
 
 function getAttendances(registerId, lessonId, studentId) {
@@ -300,6 +315,7 @@ function updateAttendances(registerId, lessonId, studentId, entryTime, exitTime,
     } else {
         console.error("Register not found");
     }
+    saveRegisters();
 }
 
 function deleteAttendances(registerId, lessonId, studentId) {
@@ -324,4 +340,5 @@ function deleteAttendances(registerId, lessonId, studentId) {
     } else {
         console.error("Register not found");
     }
+    saveRegisters();
 }

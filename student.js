@@ -1,4 +1,8 @@
-const students = []
+const students = JSON.parse(localStorage.getItem('students')) || [];
+
+function saveStudents() {
+    localStorage.setItem('students', JSON.stringify(students));
+}
 
 function createStudent(name, lastName, email, phoneNumber){
     const newStudent = {
@@ -9,6 +13,7 @@ function createStudent(name, lastName, email, phoneNumber){
         phoneNumber,
     };
     students.push(newStudent);
+    saveStudents();
 };
 
 function deleteStudent(idStudent){
@@ -23,7 +28,7 @@ function deleteStudent(idStudent){
         console.log(students);
 
     }
-
+    saveStudents();
 }
 
 function updateStudent(idStudent, name, lastName, email, phoneNumber){
@@ -37,6 +42,7 @@ function updateStudent(idStudent, name, lastName, email, phoneNumber){
     } else {
         console.log("Studente non trovato.");
     }
+    saveStudents;
 };
 
 
